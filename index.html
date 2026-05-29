@@ -289,60 +289,62 @@ left:50%;
 top:50%;
 transform:translate(-50%,-50%);
 pointer-events:none;
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 36%, white);
-border:1.5px solid color-mix(in srgb, var(--patchColor,#66c7ec) 62%, black);
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 34%, white);
+border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 70%, black);
 box-shadow:
-inset 0 1px 0 rgba(255,255,255,.45),
-0 2px 4px rgba(0,0,0,.08);
-opacity:.72;
+inset 0 1px 0 rgba(255,255,255,.48),
+0 2px 5px rgba(0,0,0,.10);
+opacity:.78;
 }
 
 .clueShape.square{
-width:58%;
-height:58%;
-border-radius:6px;
+width:74%;
+height:74%;
+border-radius:8px;
 }
 
 .clueShape.wide{
-width:72%;
-height:32%;
-border-radius:5px;
+width:90%;
+height:52%;
+border-radius:7px;
 }
 
 .clueShape.tall{
-width:32%;
-height:72%;
-border-radius:5px;
+width:52%;
+height:90%;
+border-radius:7px;
 }
 
 .clueShape.any{
-width:58%;
-height:58%;
-border-radius:7px;
+width:74%;
+height:74%;
+border-radius:9px;
 border-style:dashed;
-background:color-mix(in srgb, var(--patchColor,#8b79e6) 28%, white);
+border-width:2px;
+background:color-mix(in srgb, var(--patchColor,#8b79e6) 30%, white);
 }
 
 .clueNumber{
 position:relative;
 z-index:3;
-min-width:min(46%,28px);
-height:min(46%,28px);
+min-width:58%;
+max-width:86%;
+height:58%;
 padding:0 5px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:5px;
-font-size:.72em;
+border-radius:6px;
+font-size:.82em;
 font-weight:950;
-letter-spacing:-.04em;
+letter-spacing:-.045em;
 color:#fff;
 background:var(--patchColor,#2e91d8);
 box-shadow:
-0 1px 0 rgba(0,0,0,.14),
-0 3px 7px rgba(0,0,0,.16),
-inset 0 1px 0 rgba(255,255,255,.32);
-text-shadow:0 1px 1px rgba(0,0,0,.25);
+0 1px 0 rgba(0,0,0,.16),
+0 3px 8px rgba(0,0,0,.18),
+inset 0 1px 0 rgba(255,255,255,.34);
+text-shadow:0 1px 1px rgba(0,0,0,.28);
 }
 
 .clueNumber.free{
@@ -350,24 +352,49 @@ display:none;
 }
 
 .cell.covered .clueShape{
-opacity:.46;
+opacity:.50;
 }
 
 .cell.covered .clueNumber{
-opacity:.95;
+opacity:.96;
 }
 
 html[data-theme="dark"] .clueShape{
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 30%, #1d1f21);
-border-color:color-mix(in srgb, var(--patchColor,#66c7ec) 72%, white);
-opacity:.76;
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 34%, #1d1f21);
+border-color:color-mix(in srgb, var(--patchColor,#66c7ec) 76%, white);
+opacity:.82;
 }
 
 html[data-theme="dark"] .clueNumber{
 box-shadow:
-0 1px 0 rgba(0,0,0,.25),
-0 3px 7px rgba(0,0,0,.28),
+0 1px 0 rgba(0,0,0,.28),
+0 3px 8px rgba(0,0,0,.34),
 inset 0 1px 0 rgba(255,255,255,.22);
+}
+
+@media(max-width:390px){
+.clueNumber{
+font-size:.78em;
+min-width:60%;
+height:60%;
+padding:0 4px;
+}
+
+.clueShape.square,
+.clueShape.any{
+width:78%;
+height:78%;
+}
+
+.clueShape.wide{
+width:92%;
+height:54%;
+}
+
+.clueShape.tall{
+width:54%;
+height:92%;
+}
 }
 
 .rectLayer,
@@ -1298,19 +1325,21 @@ dragStartedOnRect=userRectAt(r,c);
 pointerWasOutside=false;
 
 if(dragStartedOnRect>-1){
-selectedRect=dragStartedOnRect;
+history.push(JSON.stringify(userRects));
 
-const rect=userRects[dragStartedOnRect];
+userRects.splice(dragStartedOnRect,1);
 
-startCell=rect.r*size+rect.c;
-endCell=index;
-drawing=true;
+selectedRect=null;
+dragStartedOnRect=null;
+drawing=false;
+startCell=null;
+endCell=null;
+pointerWasOutside=false;
 
 render();
-drawPreview();
 
-status("ลากใหม่เพื่อแก้พื้นที่เดิม หรือลากออกนอกกระดานเพื่อลบ");
-vibrate(8);
+status("ลบพื้นที่แล้ว ลากใหม่ได้เลย");
+vibrate(15);
 
 return;
 }
@@ -1335,7 +1364,7 @@ if(index===null){
 pointerWasOutside=true;
 endCell=null;
 clearDraw();
-status("ปล่อยนอกกระดาน = ยกเลิก/ลบพื้นที่ที่เลือก");
+status("ปล่อยนอกกระดาน = ยกเลิกการลาก");
 return;
 }
 
@@ -1351,19 +1380,7 @@ if(!drawing||finished)return;
 e.preventDefault();
 
 if(pointerWasOutside||endCell===null){
-if(dragStartedOnRect!==null&&dragStartedOnRect>-1){
-history.push(JSON.stringify(userRects));
-
-userRects.splice(dragStartedOnRect,1);
-
-selectedRect=null;
-
-render();
-status("ลบทิ้งแล้ว");
-vibrate(15);
-}else{
 status("ยกเลิกการลาก");
-}
 
 drawing=false;
 startCell=null;
