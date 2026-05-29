@@ -294,13 +294,13 @@ background:rgba(255,77,79,.22);
 
 /* Full-cell clue redesign */
 .cell.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 24%,white);
-box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 42%,transparent);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 22%,white);
+box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 34%,transparent);
 }
 
 html[data-theme="dark"] .cell.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 20%,#202224);
-box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 50%,transparent);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 18%,#202224);
+box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 46%,transparent);
 }
 
 .clueText{
@@ -321,58 +321,64 @@ top:50%;
 transform:translate(-50%,-50%);
 z-index:1;
 pointer-events:none;
-border:3px solid color-mix(in srgb,var(--patchColor,#29b6f6) 72%,black);
+border-style:solid;
+border-color:color-mix(in srgb,var(--patchColor,#29b6f6) 74%,black);
 background:transparent;
-opacity:.68;
+opacity:.62;
 box-shadow:none;
 }
 
+/* Size is controlled by --size so outlines stay readable on 5x5 - 8x8 */
 .clueShape.square{
-width:66%;
-height:66%;
-border-radius:8px;
+width:calc(78% - (var(--size) * 1.6%));
+height:calc(78% - (var(--size) * 1.6%));
+border-width:calc(4px - (var(--size) * .18px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueShape.wide{
-width:82%;
-height:42%;
-border-radius:8px;
+width:calc(92% - (var(--size) * 1.2%));
+height:calc(50% - (var(--size) * .7%));
+border-width:calc(4px - (var(--size) * .18px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueShape.tall{
-width:42%;
-height:82%;
-border-radius:8px;
+width:calc(50% - (var(--size) * .7%));
+height:calc(92% - (var(--size) * 1.2%));
+border-width:calc(4px - (var(--size) * .18px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueShape.any{
-width:66%;
-height:66%;
-border-radius:9px;
+width:calc(78% - (var(--size) * 1.6%));
+height:calc(78% - (var(--size) * 1.6%));
 border-style:dashed;
-border-width:3px;
+border-width:calc(4px - (var(--size) * .2px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueNumber{
 position:relative;
 z-index:3;
-min-width:48%;
-max-width:82%;
-height:48%;
-padding:0 5px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:7px;
-font-size:.80em;
+width:auto;
+height:auto;
+min-width:0;
+max-width:none;
+padding:0;
+border-radius:0;
+font-size:calc(32px - (var(--size) * 1.65px));
 font-weight:950;
-letter-spacing:-.045em;
+letter-spacing:-.055em;
 color:#fff;
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 88%,black);
-box-shadow:
-0 2px 8px rgba(0,0,0,.16),
-inset 0 1px 0 rgba(255,255,255,.30);
-text-shadow:0 1px 1px rgba(0,0,0,.28);
+background:transparent;
+box-shadow:none;
+text-shadow:
+0 1px 1px rgba(0,0,0,.34),
+0 2px 7px rgba(0,0,0,.22);
 }
 
 .clueNumber.free{
@@ -380,234 +386,53 @@ display:none;
 }
 
 .cell.covered.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 18%,white);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 16%,white);
 }
 
 html[data-theme="dark"] .cell.covered.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 16%,#202224);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 14%,#202224);
 }
 
 .cell.covered .clueShape{
-opacity:.50;
+opacity:.45;
 }
 
 .cell.covered .clueNumber{
-opacity:.96;
+opacity:.94;
 }
 
 html[data-theme="dark"] .clueShape{
 border-color:color-mix(in srgb,var(--patchColor,#29b6f6) 82%,white);
-opacity:.72;
+opacity:.68;
 }
 
 html[data-theme="dark"] .clueNumber{
-box-shadow:
-0 2px 8px rgba(0,0,0,.30),
-inset 0 1px 0 rgba(255,255,255,.20);
+text-shadow:
+0 1px 1px rgba(0,0,0,.50),
+0 2px 7px rgba(0,0,0,.36);
 }
 
 @media(max-width:390px){
-.clueShape.square,
-.clueShape.any{
-width:70%;
-height:70%;
-}
-
-.clueShape.wide{
-width:86%;
-height:44%;
-}
-
-.clueShape.tall{
-width:44%;
-height:86%;
-}
-
 .clueNumber{
-font-size:.76em;
-min-width:50%;
-height:50%;
-padding:0 4px;
-}
-}
-
-.status{
-min-height:42px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:14px;
-font-weight:850;
-color:var(--softText);
-margin-top:10px;
-text-align:center;
-padding:0 6px;
-}
-
-.status.bad{
-color:var(--danger);
-}
-
-.status.good{
-color:var(--green);
-}
-
-.tools{
-display:grid;
-grid-template-columns:1fr 1fr 1fr;
-gap:10px;
-margin-top:14px;
-}
-
-.tool{
-height:50px;
-border-radius:16px;
-background:var(--soft);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:15px;
-font-weight:850;
-color:var(--softText);
-box-shadow:0 8px 18px var(--shadow);
-transition:.14s;
-}
-
-.tool:active,
-.pill:active,
-.levelBtn:active,
-.settingsBtn:active,
-.menuItem:active{
-transform:scale(.94);
-filter:brightness(.95);
-}
-
-.winOverlay{
-position:absolute;
-inset:0;
-display:none;
-align-items:center;
-justify-content:center;
-padding:28px;
-z-index:20;
-}
-
-.winBox{
-width:100%;
-background:var(--card);
-border:1px solid rgba(31,168,92,.35);
-border-radius:24px;
-padding:24px 18px;
-text-align:center;
-box-shadow:0 20px 60px rgba(0,0,0,.22);
-animation:pop .28s ease;
-}
-
-@keyframes pop{
-from{opacity:0;transform:translateY(10px) scale(.96);}
-to{opacity:1;transform:translateY(0) scale(1);}
-}
-
-.winTitle{
-font-size:28px;
-font-weight:900;
-color:var(--green);
-margin-bottom:10px;
-}
-
-.winDesc{
-font-size:17px;
-font-weight:800;
-line-height:1.5;
-}
-
-.winGlow{
-animation:glow 1s infinite;
-}
-
-@keyframes glow{
-0%{box-shadow:0 0 0 0 rgba(31,168,92,.1);}
-50%{box-shadow:0 0 0 8px rgba(31,168,92,.35);}
-100%{box-shadow:0 0 0 0 rgba(31,168,92,.1);}
-}
-
-@media(max-width:390px){
-.headerRow{
-grid-template-columns:42px minmax(0,1fr) 42px;
-gap:8px;
-}
-
-.title{
-font-size:22px;
-}
-
-.levelBtn,
-.settingsBtn{
-width:42px;
-height:42px;
-}
-
-.cell{
-font-size:calc(32px - (var(--size) * 1.5px));
-}
-
-.clueNumber{
-font-size:.74em;
-min-width:52%;
-height:52%;
-padding:0 4px;
+font-size:calc(30px - (var(--size) * 1.55px));
 }
 
 .clueShape.square,
 .clueShape.any{
-width:74%;
-height:74%;
+width:calc(80% - (var(--size) * 1.5%));
+height:calc(80% - (var(--size) * 1.5%));
 }
 
 .clueShape.wide{
-width:88%;
-height:50%;
+width:calc(94% - (var(--size) * 1.1%));
+height:calc(52% - (var(--size) * .65%));
 }
 
 .clueShape.tall{
-width:50%;
-height:88%;
+width:calc(52% - (var(--size) * .65%));
+height:calc(94% - (var(--size) * 1.1%));
 }
 }
-
-@media(max-height:760px){
-.app{
-padding:max(12px,env(safe-area-inset-top)) 16px max(14px,env(safe-area-inset-bottom));
-}
-
-.headerRow{
-margin:4px 0 12px;
-}
-
-.title{
-font-size:21px;
-}
-
-.levelBtn,
-.settingsBtn{
-width:40px;
-height:40px;
-}
-
-.pill{
-height:46px;
-}
-
-.howto{
-font-size:12px;
-margin-bottom:10px;
-}
-
-.tool{
-height:46px;
-}
-}
-
 /* Modern clean override */
 :root{
 --bg:#f6f5f2;
@@ -729,13 +554,13 @@ opacity:.9;
 
 /* Full-cell clue redesign */
 .cell.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 24%,white);
-box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 42%,transparent);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 22%,white);
+box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 34%,transparent);
 }
 
 html[data-theme="dark"] .cell.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 20%,#202224);
-box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 50%,transparent);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 18%,#202224);
+box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--patchColor,#29b6f6) 46%,transparent);
 }
 
 .clueText{
@@ -756,58 +581,64 @@ top:50%;
 transform:translate(-50%,-50%);
 z-index:1;
 pointer-events:none;
-border:3px solid color-mix(in srgb,var(--patchColor,#29b6f6) 72%,black);
+border-style:solid;
+border-color:color-mix(in srgb,var(--patchColor,#29b6f6) 74%,black);
 background:transparent;
-opacity:.68;
+opacity:.62;
 box-shadow:none;
 }
 
+/* Size is controlled by --size so outlines stay readable on 5x5 - 8x8 */
 .clueShape.square{
-width:66%;
-height:66%;
-border-radius:8px;
+width:calc(78% - (var(--size) * 1.6%));
+height:calc(78% - (var(--size) * 1.6%));
+border-width:calc(4px - (var(--size) * .18px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueShape.wide{
-width:82%;
-height:42%;
-border-radius:8px;
+width:calc(92% - (var(--size) * 1.2%));
+height:calc(50% - (var(--size) * .7%));
+border-width:calc(4px - (var(--size) * .18px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueShape.tall{
-width:42%;
-height:82%;
-border-radius:8px;
+width:calc(50% - (var(--size) * .7%));
+height:calc(92% - (var(--size) * 1.2%));
+border-width:calc(4px - (var(--size) * .18px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueShape.any{
-width:66%;
-height:66%;
-border-radius:9px;
+width:calc(78% - (var(--size) * 1.6%));
+height:calc(78% - (var(--size) * 1.6%));
 border-style:dashed;
-border-width:3px;
+border-width:calc(4px - (var(--size) * .2px));
+border-radius:calc(12px - (var(--size) * .45px));
 }
 
 .clueNumber{
 position:relative;
 z-index:3;
-min-width:48%;
-max-width:82%;
-height:48%;
-padding:0 5px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:7px;
-font-size:.80em;
+width:auto;
+height:auto;
+min-width:0;
+max-width:none;
+padding:0;
+border-radius:0;
+font-size:calc(32px - (var(--size) * 1.65px));
 font-weight:950;
-letter-spacing:-.045em;
+letter-spacing:-.055em;
 color:#fff;
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 88%,black);
-box-shadow:
-0 2px 8px rgba(0,0,0,.16),
-inset 0 1px 0 rgba(255,255,255,.30);
-text-shadow:0 1px 1px rgba(0,0,0,.28);
+background:transparent;
+box-shadow:none;
+text-shadow:
+0 1px 1px rgba(0,0,0,.34),
+0 2px 7px rgba(0,0,0,.22);
 }
 
 .clueNumber.free{
@@ -815,70 +646,53 @@ display:none;
 }
 
 .cell.covered.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 18%,white);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 16%,white);
 }
 
 html[data-theme="dark"] .cell.covered.clueCell{
-background:color-mix(in srgb,var(--patchColor,#29b6f6) 16%,#202224);
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 14%,#202224);
 }
 
 .cell.covered .clueShape{
-opacity:.50;
+opacity:.45;
 }
 
 .cell.covered .clueNumber{
-opacity:.96;
+opacity:.94;
 }
 
 html[data-theme="dark"] .clueShape{
 border-color:color-mix(in srgb,var(--patchColor,#29b6f6) 82%,white);
-opacity:.72;
+opacity:.68;
 }
 
 html[data-theme="dark"] .clueNumber{
-box-shadow:
-0 2px 8px rgba(0,0,0,.30),
-inset 0 1px 0 rgba(255,255,255,.20);
+text-shadow:
+0 1px 1px rgba(0,0,0,.50),
+0 2px 7px rgba(0,0,0,.36);
 }
 
 @media(max-width:390px){
+.clueNumber{
+font-size:calc(30px - (var(--size) * 1.55px));
+}
+
 .clueShape.square,
 .clueShape.any{
-width:70%;
-height:70%;
+width:calc(80% - (var(--size) * 1.5%));
+height:calc(80% - (var(--size) * 1.5%));
 }
 
 .clueShape.wide{
-width:86%;
-height:44%;
+width:calc(94% - (var(--size) * 1.1%));
+height:calc(52% - (var(--size) * .65%));
 }
 
 .clueShape.tall{
-width:44%;
-height:86%;
-}
-
-.clueNumber{
-font-size:.76em;
-min-width:50%;
-height:50%;
-padding:0 4px;
+width:calc(52% - (var(--size) * .65%));
+height:calc(94% - (var(--size) * 1.1%));
 }
 }
-
-.status{
-font-size:13px;
-}
-
-.tool{
-background:rgba(240,238,233,.92);
-box-shadow:0 8px 22px rgba(0,0,0,.045);
-}
-
-html[data-theme="dark"] .tool{
-background:rgba(41,43,47,.92);
-}
-
 </style>
 </head>
 
@@ -909,7 +723,7 @@ background:rgba(41,43,47,.92);
 </div>
 
 <div class="howto">
-ลากให้ครบทั้งกระดาน / สีคือคำใบ้ / ตัวเลข = จำนวนช่อง / ไม่มีเลข = เดาขนาด / เส้นคือรูปทรง
+ลากให้ครบทั้งกระดาน / สีคือคำใบ้ / ตัวเลข = จำนวนช่อง / เส้นคือรูปทรง
 </div>
 
 <div class="boardWrap">
