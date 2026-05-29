@@ -282,51 +282,6 @@ line-height:1;
 isolation:isolate;
 }
 
-.clueNumber{
-position:relative;
-z-index:3;
-width:min(62%,34px);
-height:min(62%,34px);
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:8px;
-font-size:.78em;
-font-weight:950;
-letter-spacing:-.04em;
-color:#fff;
-background:var(--patchColor,#2e91d8);
-box-shadow:
-0 2px 0 rgba(0,0,0,.12),
-0 5px 12px rgba(0,0,0,.16),
-inset 0 1px 0 rgba(255,255,255,.36);
-text-shadow:0 1px 1px rgba(0,0,0,.28);
-}
-
-.clueNumber::before{
-content:"";
-position:absolute;
-inset:-4px;
-border-radius:11px;
-border:2px dashed rgba(255,255,255,.62);
-box-shadow:0 0 0 1px color-mix(in srgb, var(--patchColor,#2e91d8) 70%, transparent);
-pointer-events:none;
-}
-
-.clueNumber::after{
-content:"";
-position:absolute;
-left:50%;
-top:-6px;
-width:8px;
-height:8px;
-border-radius:50%;
-background:rgba(255,255,255,.62);
-transform:translateX(-50%);
-box-shadow:0 1px 2px rgba(0,0,0,.16);
-pointer-events:none;
-}
-
 .clueShape{
 position:absolute;
 z-index:1;
@@ -334,43 +289,117 @@ left:50%;
 top:50%;
 transform:translate(-50%,-50%);
 pointer-events:none;
-opacity:.20;
-border:3px solid var(--patchColor,#2e91d8);
-background:rgba(255,255,255,.18);
+opacity:.46;
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 42%, white);
+border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 72%, black);
 box-shadow:
-inset 0 0 0 2px rgba(255,255,255,.42),
-0 4px 12px rgba(0,0,0,.10);
+0 2px 0 rgba(0,0,0,.08),
+inset 0 1px 0 rgba(255,255,255,.55);
+}
+
+.clueShape::before{
+content:"";
+position:absolute;
+inset:-5px;
+border-radius:inherit;
+border:2px dashed color-mix(in srgb, var(--patchColor,#66c7ec) 78%, black);
+opacity:.60;
 }
 
 .clueShape.square{
-width:72%;
-height:72%;
-border-radius:12px;
+width:68%;
+height:68%;
+border-radius:8px;
 }
 
 .clueShape.wide{
-width:86%;
-height:48%;
-border-radius:999px;
+width:88%;
+height:44%;
+border-radius:8px;
 }
 
 .clueShape.tall{
-width:48%;
-height:86%;
-border-radius:999px;
+width:44%;
+height:88%;
+border-radius:8px;
+}
+
+.clueShape.any{
+width:68%;
+height:68%;
+border-radius:12px;
+border-style:dotted;
+background:
+radial-gradient(circle at 22% 22%, rgba(255,255,255,.35) 0 12%, transparent 13%),
+color-mix(in srgb, var(--patchColor,#66c7ec) 38%, white);
+}
+
+.clueShape.any::before{
+border-style:dashed;
+}
+
+.clueNumber{
+position:relative;
+z-index:3;
+min-width:min(54%,31px);
+height:min(54%,31px);
+padding:0 5px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:7px;
+font-size:.76em;
+font-weight:950;
+letter-spacing:-.04em;
+color:#fff;
+background:var(--patchColor,#2e91d8);
+box-shadow:
+0 2px 0 rgba(0,0,0,.14),
+0 4px 9px rgba(0,0,0,.18),
+inset 0 1px 0 rgba(255,255,255,.38);
+text-shadow:0 1px 1px rgba(0,0,0,.30);
+}
+
+.clueNumber::before{
+content:"";
+position:absolute;
+inset:-4px;
+border-radius:10px;
+border:2px dashed color-mix(in srgb, var(--patchColor,#2e91d8) 76%, black);
+opacity:.50;
+pointer-events:none;
+}
+
+.clueNumber.free{
+min-width:min(46%,28px);
+height:min(46%,28px);
+font-size:.70em;
+background:color-mix(in srgb, var(--patchColor,#8b79e6) 88%, black);
 }
 
 .cell.covered .clueShape{
-opacity:.12;
+opacity:.25;
+}
+
+.cell.covered .clueNumber{
+opacity:.92;
 }
 
 html[data-theme="dark"] .clueShape{
-opacity:.28;
-background:rgba(255,255,255,.06);
+opacity:.52;
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 36%, #1d1f21);
 }
 
+html[data-theme="dark"] .clueShape::before,
 html[data-theme="dark"] .clueNumber::before{
-border-color:rgba(255,255,255,.52);
+opacity:.48;
+}
+
+html[data-theme="dark"] .clueNumber{
+box-shadow:
+0 2px 0 rgba(0,0,0,.28),
+0 5px 12px rgba(0,0,0,.36),
+inset 0 1px 0 rgba(255,255,255,.22);
 }
 
 .rectLayer,
@@ -972,30 +1001,30 @@ function shapeClass(shape){
 if(shape==="square")return "square";
 if(shape==="wide")return "wide";
 if(shape==="tall")return "tall";
-return "";
+return "any";
 }
 
 function patchColorByValue(value,shape){
-if(value===null)return "#8b79e6";
-
 const palette=[
-"#66c7ec",
+"#ef5350",
+"#29b6f6",
+"#26a69a",
 "#f47b5b",
-"#0e9da5",
-"#d8c15e",
-"#5cc981",
-"#e36a91",
-"#c0763a",
-"#7890d4"
+"#66bb6a",
+"#ec5f93",
+"#b08b2e",
+"#7e57e8",
+"#546e7a"
 ];
 
-let seed=value;
+let seed=value===null?7:value;
 
-if(shape==="square")seed+=1;
-if(shape==="wide")seed+=3;
-if(shape==="tall")seed+=5;
+if(shape==="square")seed+=2;
+if(shape==="wide")seed+=5;
+if(shape==="tall")seed+=8;
+if(shape==="any")seed+=11;
 
-return palette[seed%palette.length];
+return palette[Math.abs(seed)%palette.length];
 }
 
 function shapeOk(rect,shape){
@@ -1248,18 +1277,16 @@ wrap.className="clueText";
 const shapeType=shapeClass(clue.shape);
 const patchColor=patchColorByValue(clue.value,clue.shape);
 
-if(shapeType){
 const shape=document.createElement("div");
 
 shape.className=`clueShape ${shapeType}`;
 shape.style.setProperty("--patchColor",patchColor);
 
 wrap.appendChild(shape);
-}
 
 const main=document.createElement("div");
 
-main.className="clueNumber";
+main.className=clue.value===null?"clueNumber free":"clueNumber";
 main.textContent=clue.value===null?"?":clue.value;
 main.style.setProperty("--patchColor",patchColor);
 
