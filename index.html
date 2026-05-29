@@ -290,61 +290,69 @@ top:50%;
 transform:translate(-50%,-50%);
 pointer-events:none;
 background:color-mix(in srgb, var(--patchColor,#66c7ec) 34%, white);
-border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 70%, black);
+border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 72%, black);
 box-shadow:
 inset 0 1px 0 rgba(255,255,255,.48),
 0 2px 5px rgba(0,0,0,.10);
-opacity:.78;
+opacity:.82;
 }
 
 .clueShape.square{
-width:74%;
-height:74%;
-border-radius:8px;
+width:88%;
+height:88%;
+border-radius:10px;
 }
 
 .clueShape.wide{
-width:90%;
-height:52%;
-border-radius:7px;
+width:96%;
+height:58%;
+border-radius:8px;
 }
 
 .clueShape.tall{
-width:52%;
-height:90%;
-border-radius:7px;
+width:58%;
+height:96%;
+border-radius:8px;
 }
 
 .clueShape.any{
-width:74%;
-height:74%;
-border-radius:9px;
+width:88%;
+height:88%;
+border-radius:11px;
 border-style:dashed;
-border-width:2px;
-background:color-mix(in srgb, var(--patchColor,#8b79e6) 30%, white);
+border-width:2.5px;
+background:
+linear-gradient(45deg,
+rgba(255,255,255,.18) 0 18%,
+transparent 18% 32%,
+rgba(255,255,255,.18) 32% 50%,
+transparent 50% 64%,
+rgba(255,255,255,.18) 64% 82%,
+transparent 82% 100%),
+color-mix(in srgb, var(--patchColor,#8b79e6) 32%, white);
 }
 
 .clueNumber{
 position:relative;
 z-index:3;
-min-width:58%;
-max-width:86%;
-height:58%;
+min-width:54%;
+max-width:82%;
+height:54%;
 padding:0 5px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:6px;
-font-size:.82em;
+border-radius:7px;
+font-size:.80em;
 font-weight:950;
 letter-spacing:-.045em;
 color:#fff;
-background:var(--patchColor,#2e91d8);
+background:color-mix(in srgb, var(--patchColor,#2e91d8) 88%, black);
 box-shadow:
 0 1px 0 rgba(0,0,0,.16),
 0 3px 8px rgba(0,0,0,.18),
 inset 0 1px 0 rgba(255,255,255,.34);
-text-shadow:0 1px 1px rgba(0,0,0,.28);
+text-shadow:0 1px 1px rgba(0,0,0,.30);
 }
 
 .clueNumber.free{
@@ -352,17 +360,29 @@ display:none;
 }
 
 .cell.covered .clueShape{
-opacity:.50;
+opacity:.74;
 }
 
 .cell.covered .clueNumber{
-opacity:.96;
+opacity:.98;
 }
 
 html[data-theme="dark"] .clueShape{
 background:color-mix(in srgb, var(--patchColor,#66c7ec) 34%, #1d1f21);
 border-color:color-mix(in srgb, var(--patchColor,#66c7ec) 76%, white);
-opacity:.82;
+opacity:.86;
+}
+
+html[data-theme="dark"] .clueShape.any{
+background:
+linear-gradient(45deg,
+rgba(255,255,255,.08) 0 18%,
+transparent 18% 32%,
+rgba(255,255,255,.08) 32% 50%,
+transparent 50% 64%,
+rgba(255,255,255,.08) 64% 82%,
+transparent 82% 100%),
+color-mix(in srgb, var(--patchColor,#8b79e6) 34%, #1d1f21);
 }
 
 html[data-theme="dark"] .clueNumber{
@@ -374,10 +394,27 @@ inset 0 1px 0 rgba(255,255,255,.22);
 
 @media(max-width:390px){
 .clueNumber{
-font-size:.78em;
-min-width:60%;
-height:60%;
+font-size:.76em;
+min-width:56%;
+height:56%;
 padding:0 4px;
+}
+
+.clueShape.square,
+.clueShape.any{
+width:90%;
+height:90%;
+}
+
+.clueShape.wide{
+width:98%;
+height:60%;
+}
+
+.clueShape.tall{
+width:60%;
+height:98%;
+}
 }
 
 .clueShape.square,
@@ -1242,9 +1279,10 @@ box.style.left=`${rect.c/size*100}%`;
 box.style.top=`${rect.r/size*100}%`;
 box.style.width=`${rect.w/size*100}%`;
 box.style.height=`${rect.h/size*100}%`;
-box.style.background=colors[i%colors.length];
-box.style.opacity=selectedRect===i?".82":".58";
-box.style.borderColor=selectedRect===i?"var(--blue)":"rgba(0,0,0,.42)";
+const rectColor=patchColorForRect(rect);
+box.style.background=`color-mix(in srgb, ${rectColor} 38%, white)`;
+box.style.borderColor=selectedRect===i?rectColor:`color-mix(in srgb, ${rectColor} 58%, transparent)`;
+box.style.opacity=selectedRect===i?".50":".30";
 
 rectLayer.appendChild(box);
 });
@@ -1557,6 +1595,16 @@ if(layer)layer.innerHTML="";
 
 function cluesInside(rect){
 return clues.filter(clue=>rectContains(rect,clue.r,clue.c));
+}
+
+function patchColorForRect(rect){
+const inside=cluesInside(rect);
+
+if(inside.length===1){
+return patchColorByValue(inside[0].value,inside[0].shape);
+}
+
+return "var(--blue)";
 }
 
 function overlappingIndexes(rect,ignoreIndex=null){
