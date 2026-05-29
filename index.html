@@ -242,16 +242,17 @@ filter:blur(1px);
 display:flex;
 align-items:center;
 justify-content:center;
-background:var(--cell);
-font-size:clamp(15px,5.5vw,28px);
-font-weight:900;
+background:transparent;
+font-size:clamp(16px,5.8vw,30px);
+font-weight:950;
 color:var(--text);
 position:relative;
-z-index:1;
+z-index:3;
 min-width:0;
 min-height:0;
 border-right:1px solid var(--line);
 border-bottom:1px solid var(--line);
+text-shadow:0 1px 2px rgba(255,255,255,.72);
 }
 
 .cell.clue{
@@ -259,11 +260,15 @@ color:var(--text);
 }
 
 .cell.covered{
-color:rgba(17,17,17,.50);
+color:rgba(17,17,17,.88);
 }
 
 html[data-theme="dark"] .cell.covered{
-color:rgba(245,245,245,.60);
+color:rgba(245,245,245,.92);
+}
+
+html[data-theme="dark"] .cell{
+text-shadow:0 1px 2px rgba(0,0,0,.65);
 }
 
 .clueText{
@@ -285,15 +290,22 @@ font-weight:900;
 position:absolute;
 inset:0;
 pointer-events:none;
+}
+
+.rectLayer{
 z-index:2;
+}
+
+.drawLayer{
+z-index:6;
 }
 
 .rectBox,
 .drawBox{
 position:absolute;
 border-radius:10px;
-border:3px solid rgba(0,0,0,.45);
-box-shadow:inset 0 0 0 1px rgba(255,255,255,.45);
+border:3px solid rgba(0,0,0,.48);
+box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
 }
 
 html[data-theme="dark"] .rectBox,
@@ -303,14 +315,15 @@ box-shadow:inset 0 0 0 1px rgba(0,0,0,.3);
 }
 
 .drawBox{
-z-index:3;
-border-color:var(--blue);
-background:rgba(10,132,255,.20);
+z-index:6;
+border:4px solid var(--blue);
+background:rgba(10,132,255,.30);
+box-shadow:0 0 0 2px rgba(255,255,255,.7), inset 0 0 0 1px rgba(255,255,255,.6);
 }
 
 .drawBox.bad{
 border-color:var(--danger);
-background:rgba(255,77,79,.20);
+background:rgba(255,77,79,.26);
 }
 
 .status{
@@ -578,7 +591,7 @@ height:46px;
 </div>
 
 <div class="howto">
-ลากให้ครบทั้งกระดาน / ตัวเลข = จำนวนช่อง / ? + รูปทรง = พื้นที่อิสระที่ต้องลากตามทรง
+ลากให้ครบทั้งกระดาน / ตัวเลข = จำนวนช่อง / ? = เดาขนาดจากพื้นที่รอบ ๆ / รูปทรงคือข้อบังคับ
 </div>
 
 <div class="boardWrap">
@@ -674,32 +687,32 @@ return Math.floor(Math.random()*(max-min+1))+min;
 
 function getLevelSize(){
 if(currentLevel==="easy")return 5;
-if(currentLevel==="hard")return 8;
-return 6;
+if(currentLevel==="hard")return Math.random()<.45?7:8;
+return Math.random()<.35?6:7;
 }
 
 function getTargetRects(){
 if(currentLevel==="easy")return rand(6,8);
-if(currentLevel==="hard")return rand(9,12);
-return rand(7,10);
+if(currentLevel==="hard")return size===8?rand(9,12):rand(8,11);
+return size===7?rand(8,11):rand(7,10);
 }
 
 function getMaxArea(){
 if(currentLevel==="easy")return 12;
-if(currentLevel==="hard")return 24;
-return 16;
+if(currentLevel==="hard")return size===8?26:22;
+return size===7?18:16;
 }
 
 function getMinLargeNumber(){
 if(currentLevel==="easy")return 5;
-if(currentLevel==="hard")return 12;
-return 8;
+if(currentLevel==="hard")return size===8?12:10;
+return size===7?8:7;
 }
 
 function getFreeClueCount(total){
 if(currentLevel==="easy")return 0;
-if(currentLevel==="hard")return Math.min(4,Math.max(2,total-5));
-return Math.min(2,Math.max(1,total-5));
+if(currentLevel==="hard")return Math.min(total-5,rand(2,4));
+return Math.min(total-5,rand(1,2));
 }
 
 function makeRect(r1,c1,r2,c2){
@@ -897,6 +910,7 @@ const diff=Math.abs(rects.length-target);
 
 const needHigh=currentLevel==="hard"?3:currentLevel==="normal"?2:1;
 const needLow=currentLevel==="hard"?3:currentLevel==="normal"?2:1;
+const uniqueAreaCount=new Set(areas).size;
 
 const highPenalty=Math.max(0,needHigh-highCount)*28;
 const lowPenalty=Math.max(0,needLow-lowCount)*12;
@@ -910,7 +924,8 @@ onePenalty+
 highPenalty+
 lowPenalty+
 Math.abs(highCount-lowCount)*2-
-midCount;
+midCount-
+uniqueAreaCount*3;
 
 if(score<bestScore){
 bestScore=score;
@@ -956,7 +971,26 @@ const clueList=[];
 
 rects.forEach((rect,i)=>{
 const cells=rectCells(rect);
-const pick=cells[rand(0,cells.length-1)];
+const clueStyle=Math.random();
+let candidateCells=cells;
+
+if(clueStyle<.34){
+candidateCells=cells.filter(cell=>{
+const rr=Math.floor(cell/size);
+const cc=cell%size;
+return rr===rect.r||rr===rect.r+rect.h-1||cc===rect.c||cc===rect.c+rect.w-1;
+});
+}else if(clueStyle<.58){
+candidateCells=cells.filter(cell=>{
+const rr=Math.floor(cell/size);
+const cc=cell%size;
+return (rr===rect.r||rr===rect.r+rect.h-1)&&(cc===rect.c||cc===rect.c+rect.w-1);
+});
+}
+
+if(!candidateCells.length)candidateCells=cells;
+
+const pick=candidateCells[rand(0,candidateCells.length-1)];
 const s=shapeOf(rect);
 
 let useShape=false;
@@ -1067,7 +1101,7 @@ box.style.top=`${rect.r/size*100}%`;
 box.style.width=`${rect.w/size*100}%`;
 box.style.height=`${rect.h/size*100}%`;
 box.style.background=colors[i%colors.length];
-box.style.opacity=selectedRect===i?".95":".72";
+box.style.opacity=selectedRect===i?".82":".58";
 box.style.borderColor=selectedRect===i?"var(--blue)":"rgba(0,0,0,.42)";
 
 rectLayer.appendChild(box);
@@ -1709,7 +1743,7 @@ winText.innerHTML=`
 
 winOverlay.style.display="flex";
 
-status("ชนะแล้ว!","good");
+status("");
 vibrate([60,40,90]);
 }
 
