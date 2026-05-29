@@ -289,70 +289,62 @@ left:50%;
 top:50%;
 transform:translate(-50%,-50%);
 pointer-events:none;
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 34%, white);
-border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 72%, black);
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 30%, white);
+border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 68%, black);
 box-shadow:
 inset 0 1px 0 rgba(255,255,255,.48),
 0 2px 5px rgba(0,0,0,.10);
-opacity:.82;
+opacity:.72;
 }
 
 .clueShape.square{
-width:88%;
-height:88%;
-border-radius:10px;
+width:68%;
+height:68%;
+border-radius:8px;
 }
 
 .clueShape.wide{
-width:96%;
-height:58%;
-border-radius:8px;
+width:84%;
+height:48%;
+border-radius:7px;
 }
 
 .clueShape.tall{
-width:58%;
-height:96%;
-border-radius:8px;
+width:48%;
+height:84%;
+border-radius:7px;
 }
 
 .clueShape.any{
-width:88%;
-height:88%;
-border-radius:11px;
+width:68%;
+height:68%;
+border-radius:8px;
 border-style:dashed;
-border-width:2.5px;
-background:
-linear-gradient(45deg,
-rgba(255,255,255,.18) 0 18%,
-transparent 18% 32%,
-rgba(255,255,255,.18) 32% 50%,
-transparent 50% 64%,
-rgba(255,255,255,.18) 64% 82%,
-transparent 82% 100%),
-color-mix(in srgb, var(--patchColor,#8b79e6) 32%, white);
+border-width:2px;
+background:color-mix(in srgb, var(--patchColor,#8b79e6) 24%, white);
 }
 
 .clueNumber{
 position:relative;
 z-index:3;
-min-width:54%;
-max-width:82%;
-height:54%;
+min-width:50%;
+max-width:78%;
+height:50%;
 padding:0 5px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:7px;
-font-size:.80em;
+border-radius:6px;
+font-size:.76em;
 font-weight:950;
-letter-spacing:-.045em;
+letter-spacing:-.04em;
 color:#fff;
-background:color-mix(in srgb, var(--patchColor,#2e91d8) 88%, black);
+background:var(--patchColor,#2e91d8);
 box-shadow:
-0 1px 0 rgba(0,0,0,.16),
-0 3px 8px rgba(0,0,0,.18),
+0 1px 0 rgba(0,0,0,.14),
+0 3px 7px rgba(0,0,0,.16),
 inset 0 1px 0 rgba(255,255,255,.34);
-text-shadow:0 1px 1px rgba(0,0,0,.30);
+text-shadow:0 1px 1px rgba(0,0,0,.28);
 }
 
 .clueNumber.free{
@@ -360,60 +352,48 @@ display:none;
 }
 
 .cell.covered .clueShape{
-opacity:.74;
+opacity:.52;
 }
 
 .cell.covered .clueNumber{
-opacity:.98;
+opacity:.96;
 }
 
 html[data-theme="dark"] .clueShape{
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 34%, #1d1f21);
-border-color:color-mix(in srgb, var(--patchColor,#66c7ec) 76%, white);
-opacity:.86;
-}
-
-html[data-theme="dark"] .clueShape.any{
-background:
-linear-gradient(45deg,
-rgba(255,255,255,.08) 0 18%,
-transparent 18% 32%,
-rgba(255,255,255,.08) 32% 50%,
-transparent 50% 64%,
-rgba(255,255,255,.08) 64% 82%,
-transparent 82% 100%),
-color-mix(in srgb, var(--patchColor,#8b79e6) 34%, #1d1f21);
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 28%, #1d1f21);
+border-color:color-mix(in srgb, var(--patchColor,#66c7ec) 74%, white);
+opacity:.78;
 }
 
 html[data-theme="dark"] .clueNumber{
 box-shadow:
 0 1px 0 rgba(0,0,0,.28),
-0 3px 8px rgba(0,0,0,.34),
+0 3px 7px rgba(0,0,0,.34),
 inset 0 1px 0 rgba(255,255,255,.22);
 }
 
 @media(max-width:390px){
 .clueNumber{
-font-size:.76em;
-min-width:56%;
-height:56%;
+font-size:.72em;
+min-width:52%;
+height:52%;
 padding:0 4px;
 }
 
 .clueShape.square,
 .clueShape.any{
-width:90%;
-height:90%;
+width:72%;
+height:72%;
 }
 
 .clueShape.wide{
-width:98%;
-height:60%;
+width:86%;
+height:50%;
 }
 
 .clueShape.tall{
-width:60%;
-height:98%;
+width:50%;
+height:86%;
 }
 }
 
@@ -1280,9 +1260,9 @@ box.style.top=`${rect.r/size*100}%`;
 box.style.width=`${rect.w/size*100}%`;
 box.style.height=`${rect.h/size*100}%`;
 const rectColor=patchColorForRect(rect);
-box.style.background=`color-mix(in srgb, ${rectColor} 38%, white)`;
-box.style.borderColor=selectedRect===i?rectColor:`color-mix(in srgb, ${rectColor} 58%, transparent)`;
-box.style.opacity=selectedRect===i?".50":".30";
+box.style.background=`color-mix(in srgb, ${rectColor} 30%, white)`;
+box.style.borderColor=selectedRect===i?rectColor:`color-mix(in srgb, ${rectColor} 62%, transparent)`;
+box.style.opacity=selectedRect===i?".46":".26";
 
 rectLayer.appendChild(box);
 });
@@ -1604,7 +1584,7 @@ if(inside.length===1){
 return patchColorByValue(inside[0].value,inside[0].shape);
 }
 
-return "var(--blue)";
+return "#5ab0ff";
 }
 
 function overlappingIndexes(rect,ignoreIndex=null){
