@@ -289,116 +289,84 @@ left:50%;
 top:50%;
 transform:translate(-50%,-50%);
 pointer-events:none;
-opacity:.46;
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 42%, white);
-border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 72%, black);
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 36%, white);
+border:1.5px solid color-mix(in srgb, var(--patchColor,#66c7ec) 62%, black);
 box-shadow:
-0 2px 0 rgba(0,0,0,.08),
-inset 0 1px 0 rgba(255,255,255,.55);
-}
-
-.clueShape::before{
-content:"";
-position:absolute;
-inset:-5px;
-border-radius:inherit;
-border:2px dashed color-mix(in srgb, var(--patchColor,#66c7ec) 78%, black);
-opacity:.60;
+inset 0 1px 0 rgba(255,255,255,.45),
+0 2px 4px rgba(0,0,0,.08);
+opacity:.72;
 }
 
 .clueShape.square{
-width:68%;
-height:68%;
-border-radius:8px;
+width:58%;
+height:58%;
+border-radius:6px;
 }
 
 .clueShape.wide{
-width:88%;
-height:44%;
-border-radius:8px;
+width:72%;
+height:32%;
+border-radius:5px;
 }
 
 .clueShape.tall{
-width:44%;
-height:88%;
-border-radius:8px;
+width:32%;
+height:72%;
+border-radius:5px;
 }
 
 .clueShape.any{
-width:68%;
-height:68%;
-border-radius:12px;
-border-style:dotted;
-background:
-radial-gradient(circle at 22% 22%, rgba(255,255,255,.35) 0 12%, transparent 13%),
-color-mix(in srgb, var(--patchColor,#66c7ec) 38%, white);
-}
-
-.clueShape.any::before{
+width:58%;
+height:58%;
+border-radius:7px;
 border-style:dashed;
+background:color-mix(in srgb, var(--patchColor,#8b79e6) 28%, white);
 }
 
 .clueNumber{
 position:relative;
 z-index:3;
-min-width:min(54%,31px);
-height:min(54%,31px);
+min-width:min(46%,28px);
+height:min(46%,28px);
 padding:0 5px;
 display:flex;
 align-items:center;
 justify-content:center;
-border-radius:7px;
-font-size:.76em;
+border-radius:5px;
+font-size:.72em;
 font-weight:950;
 letter-spacing:-.04em;
 color:#fff;
 background:var(--patchColor,#2e91d8);
 box-shadow:
-0 2px 0 rgba(0,0,0,.14),
-0 4px 9px rgba(0,0,0,.18),
-inset 0 1px 0 rgba(255,255,255,.38);
-text-shadow:0 1px 1px rgba(0,0,0,.30);
-}
-
-.clueNumber::before{
-content:"";
-position:absolute;
-inset:-4px;
-border-radius:10px;
-border:2px dashed color-mix(in srgb, var(--patchColor,#2e91d8) 76%, black);
-opacity:.50;
-pointer-events:none;
+0 1px 0 rgba(0,0,0,.14),
+0 3px 7px rgba(0,0,0,.16),
+inset 0 1px 0 rgba(255,255,255,.32);
+text-shadow:0 1px 1px rgba(0,0,0,.25);
 }
 
 .clueNumber.free{
-min-width:min(46%,28px);
-height:min(46%,28px);
-font-size:.70em;
-background:color-mix(in srgb, var(--patchColor,#8b79e6) 88%, black);
+display:none;
 }
 
 .cell.covered .clueShape{
-opacity:.25;
+opacity:.46;
 }
 
 .cell.covered .clueNumber{
-opacity:.92;
+opacity:.95;
 }
 
 html[data-theme="dark"] .clueShape{
-opacity:.52;
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 36%, #1d1f21);
-}
-
-html[data-theme="dark"] .clueShape::before,
-html[data-theme="dark"] .clueNumber::before{
-opacity:.48;
+background:color-mix(in srgb, var(--patchColor,#66c7ec) 30%, #1d1f21);
+border-color:color-mix(in srgb, var(--patchColor,#66c7ec) 72%, white);
+opacity:.76;
 }
 
 html[data-theme="dark"] .clueNumber{
 box-shadow:
-0 2px 0 rgba(0,0,0,.28),
-0 5px 12px rgba(0,0,0,.36),
+0 1px 0 rgba(0,0,0,.25),
+0 3px 7px rgba(0,0,0,.28),
 inset 0 1px 0 rgba(255,255,255,.22);
 }
 
@@ -1287,7 +1255,7 @@ wrap.appendChild(shape);
 const main=document.createElement("div");
 
 main.className=clue.value===null?"clueNumber free":"clueNumber";
-main.textContent=clue.value===null?"?":clue.value;
+main.textContent=clue.value===null?"":clue.value;
 main.style.setProperty("--patchColor",patchColor);
 
 wrap.appendChild(main);
