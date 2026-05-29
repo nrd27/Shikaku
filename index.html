@@ -578,7 +578,7 @@ height:46px;
 </div>
 
 <div class="howto">
-ลากให้ครบทั้งกระดาน / ตัวเลข = จำนวนช่อง / ? = ช่องอิสระ / □ = จัตุรัส / ▭ = แนวนอน / ▯ = แนวตั้ง
+ลากให้ครบทั้งกระดาน / ตัวเลข = จำนวนช่อง / ? + รูปทรง = พื้นที่อิสระที่ต้องลากตามทรง
 </div>
 
 <div class="boardWrap">
@@ -634,6 +634,7 @@ let startCell=null;
 let endCell=null;
 let selectedRect=null;
 let dragStartedOnRect=null;
+let pointerWasOutside=false;
 
 const boardEl=document.getElementById("board");
 const timerEl=document.getElementById("timer");
@@ -673,20 +674,32 @@ return Math.floor(Math.random()*(max-min+1))+min;
 
 function getLevelSize(){
 if(currentLevel==="easy")return 5;
-if(currentLevel==="hard")return 7;
+if(currentLevel==="hard")return 8;
 return 6;
 }
 
 function getTargetRects(){
-if(currentLevel==="easy")return rand(8,10);
-if(currentLevel==="hard")return rand(15,18);
-return rand(11,14);
+if(currentLevel==="easy")return rand(6,8);
+if(currentLevel==="hard")return rand(9,12);
+return rand(7,10);
 }
 
 function getMaxArea(){
-if(currentLevel==="easy")return 8;
+if(currentLevel==="easy")return 12;
+if(currentLevel==="hard")return 24;
+return 16;
+}
+
+function getMinLargeNumber(){
+if(currentLevel==="easy")return 5;
 if(currentLevel==="hard")return 12;
-return 10;
+return 8;
+}
+
+function getFreeClueCount(total){
+if(currentLevel==="easy")return 0;
+if(currentLevel==="hard")return Math.min(4,Math.max(2,total-5));
+return Math.min(2,Math.max(1,total-5));
 }
 
 function makeRect(r1,c1,r2,c2){
@@ -739,7 +752,21 @@ rects
 
 if(!candidates.length)return false;
 
-for(const item of candidates.slice(0,Math.max(1,Math.ceil(candidates.length*.7)))){
+const keepLargeChance=currentLevel==="easy"?.28:currentLevel==="hard"?.62:.45;
+
+if(Math.random()<keepLargeChance){
+candidates=candidates.filter(x=>area(x.rect)>getMinLargeNumber());
+if(!candidates.length){
+candidates=shuffle(
+rects
+.map((rect,i)=>({rect,i}))
+.filter(x=>area(x.rect)>1)
+)
+.sort((a,b)=>area(b.rect)-area(a.rect));
+}
+}
+
+for(const item of candidates.slice(0,Math.max(1,Math.ceil(candidates.length*.75)))){
 const rect=item.rect;
 const options=[];
 
@@ -760,12 +787,14 @@ options.push([
 if(!options.length)continue;
 
 options.sort((x,y)=>{
-const sx=Math.abs(area(x[0])-area(x[1]));
-const sy=Math.abs(area(y[0])-area(y[1]));
-return sx-sy;
+const maxX=Math.max(area(x[0]),area(x[1]));
+const maxY=Math.max(area(y[0]),area(y[1]));
+const scoreX=Math.abs(maxX-getMinLargeNumber())*.35 + Math.abs(area(x[0])-area(x[1]));
+const scoreY=Math.abs(maxY-getMinLargeNumber())*.35 + Math.abs(area(y[0])-area(y[1]));
+return scoreX-scoreY;
 });
 
-const pick=shuffle(options.slice(0,Math.max(1,Math.ceil(options.length*.6))))[0];
+const pick=shuffle(options.slice(0,Math.max(1,Math.ceil(options.length*.65))))[0];
 
 rects.splice(item.i,1,pick[0],pick[1]);
 
@@ -810,10 +839,12 @@ options.push([
 if(!options.length)break;
 
 options.sort((x,y)=>{
-return Math.max(area(x[0]),area(x[1]))-Math.max(area(y[0]),area(y[1]));
+const sx=Math.max(area(x[0]),area(x[1]));
+const sy=Math.max(area(y[0]),area(y[1]));
+return sx-sy;
 });
 
-const pick=shuffle(options.slice(0,Math.max(1,Math.ceil(options.length*.5))))[0];
+const pick=shuffle(options.slice(0,Math.max(1,Math.ceil(options.length*.55))))[0];
 
 rects.splice(idx,1,pick[0],pick[1]);
 guard++;
@@ -851,49 +882,102 @@ const target=getTargetRects();
 let best=null;
 let bestScore=Infinity;
 
-for(let attempt=0;attempt<80;attempt++){
+for(let attempt=0;attempt<180;attempt++){
 let rects=[{r:0,c:0,h:size,w:size}];
 
 rects=refineRects(rects,target);
 
-const maxArea=Math.max(...rects.map(area));
+const areas=rects.map(area);
+const maxArea=Math.max(...areas);
+const highCount=rects.filter(r=>area(r)>=getMinLargeNumber()).length;
+const lowCount=rects.filter(r=>area(r)<=3).length;
+const midCount=rects.filter(r=>area(r)>=4&&area(r)<getMinLargeNumber()).length;
 const oneCount=rects.filter(r=>area(r)===1).length;
 const diff=Math.abs(rects.length-target);
-const score=diff*10+Math.max(0,maxArea-getMaxArea())*8+oneCount*2;
+
+const needHigh=currentLevel==="hard"?3:currentLevel==="normal"?2:1;
+const needLow=currentLevel==="hard"?3:currentLevel==="normal"?2:1;
+
+const highPenalty=Math.max(0,needHigh-highCount)*28;
+const lowPenalty=Math.max(0,needLow-lowCount)*12;
+const maxPenalty=Math.max(0,maxArea-getMaxArea())*8;
+const onePenalty=currentLevel==="hard"?oneCount*2:oneCount*3;
+
+const score=
+diff*10+
+maxPenalty+
+onePenalty+
+highPenalty+
+lowPenalty+
+Math.abs(highCount-lowCount)*2-
+midCount;
 
 if(score<bestScore){
 bestScore=score;
 best=rects.map(r=>({...r}));
 }
 
-if(diff<=1&&maxArea<=getMaxArea())break;
+if(
+diff<=1 &&
+maxArea<=getMaxArea() &&
+highCount>=needHigh &&
+lowCount>=needLow
+){
+break;
+}
 }
 
 let rects=(best||[{r:0,c:0,h:size,w:size}])
 .map(r=>({...r}))
 .sort((a,b)=>a.r-b.r||a.c-b.c);
 
+const indexed=rects.map((r,i)=>({r,i,a:area(r)}));
+const freeCount=Math.max(0,getFreeClueCount(rects.length));
+const freeSet=new Set();
+
+/*
+Free block rule:
+- It is NOT invisible.
+- It always displays "?" plus a required shape icon.
+- The player must infer the area from remaining space, but shape is still constrained.
+*/
 const freeCandidates=shuffle(
-rects
-.map((r,i)=>({r,i}))
-.filter(x=>area(x.r)>=4)
+indexed
+.filter(x=>x.a>=4)
+.sort((a,b)=>b.a-a.a)
 );
 
-const freeIndex=(currentLevel!=="easy"&&freeCandidates.length)?freeCandidates[0].i:-1;
+for(const item of freeCandidates){
+if(freeSet.size>=freeCount)break;
+freeSet.add(item.i);
+}
 
-const clueList=rects.map((rect,i)=>{
+const clueList=[];
+
+rects.forEach((rect,i)=>{
 const cells=rectCells(rect);
 const pick=cells[rand(0,cells.length-1)];
 const s=shapeOf(rect);
-const useShape=Math.random()<.75||i===freeIndex;
 
-return{
+let useShape=false;
+
+if(freeSet.has(i)){
+useShape=true;
+}else if(currentLevel==="easy"){
+useShape=Math.random()<.85;
+}else if(currentLevel==="hard"){
+useShape=Math.random()<.48;
+}else{
+useShape=Math.random()<.64;
+}
+
+clueList.push({
 r:Math.floor(pick/size),
 c:pick%size,
-value:i===freeIndex?null:area(rect),
+value:freeSet.has(i)?null:area(rect),
 shape:useShape?s:"any",
 answer:i
-};
+});
 });
 
 return{
@@ -914,6 +998,7 @@ finished=false;
 hintUsed=0;
 selectedRect=null;
 dragStartedOnRect=null;
+pointerWasOutside=false;
 gameRelaxed=relaxationMode;
 
 clearInterval(timer);
@@ -1060,6 +1145,7 @@ const r=Math.floor(index/size);
 const c=index%size;
 
 dragStartedOnRect=userRectAt(r,c);
+pointerWasOutside=false;
 
 if(dragStartedOnRect>-1){
 selectedRect=dragStartedOnRect;
@@ -1096,13 +1182,16 @@ e.preventDefault();
 const index=getCellFromPoint(e.clientX,e.clientY,false);
 
 if(index===null){
+pointerWasOutside=true;
 endCell=null;
 clearDraw();
 status("ปล่อยนอกกระดาน = ยกเลิก/ลบพื้นที่ที่เลือก");
 return;
 }
 
-endCell=clampByCollision(startCell,index,dragStartedOnRect);
+pointerWasOutside=false;
+endCell=smartClampToObstacle(startCell,index,dragStartedOnRect);
+
 drawPreview();
 };
 
@@ -1111,7 +1200,7 @@ if(!drawing||finished)return;
 
 e.preventDefault();
 
-if(endCell===null){
+if(pointerWasOutside||endCell===null){
 if(dragStartedOnRect!==null&&dragStartedOnRect>-1){
 history.push(JSON.stringify(userRects));
 
@@ -1129,6 +1218,7 @@ status("ยกเลิกการลาก");
 drawing=false;
 startCell=null;
 dragStartedOnRect=null;
+pointerWasOutside=false;
 
 clearDraw();
 
@@ -1141,6 +1231,7 @@ drawing=false;
 startCell=null;
 endCell=null;
 dragStartedOnRect=null;
+pointerWasOutside=false;
 
 clearDraw();
 };
@@ -1150,6 +1241,7 @@ drawing=false;
 startCell=null;
 endCell=null;
 dragStartedOnRect=null;
+pointerWasOutside=false;
 
 clearDraw();
 };
@@ -1162,7 +1254,7 @@ if(strict&&(x<rect.left||x>rect.right||y<rect.top||y>rect.bottom)){
 return null;
 }
 
-if(!strict&&(x<rect.left-24||x>rect.right+24||y<rect.top-24||y>rect.bottom+24)){
+if(!strict&&(x<rect.left-20||x>rect.right+20||y<rect.top-20||y>rect.bottom+20)){
 return null;
 }
 
@@ -1172,7 +1264,25 @@ const r=Math.min(size-1,Math.max(0,Math.floor((y-rect.top)/rect.height*size)));
 return r*size+c;
 }
 
-function clampByCollision(startIndex,targetIndex,ignoreIndex=null){
+function isBlockedCell(r,c,ignoreIndex=null){
+if(r<0||c<0||r>=size||c>=size)return true;
+
+return userRects.some((rect,i)=>{
+if(i===ignoreIndex)return false;
+return rectContains(rect,r,c);
+});
+}
+
+function rectHasObstacle(rect,ignoreIndex=null){
+for(let r=rect.r;r<rect.r+rect.h;r++){
+for(let c=rect.c;c<rect.c+rect.w;c++){
+if(isBlockedCell(r,c,ignoreIndex))return true;
+}
+}
+return false;
+}
+
+function smartClampToObstacle(startIndex,targetIndex,ignoreIndex=null){
 if(startIndex===null||targetIndex===null)return targetIndex;
 
 const sr=Math.floor(startIndex/size);
@@ -1180,28 +1290,58 @@ const sc=startIndex%size;
 const tr=Math.floor(targetIndex/size);
 const tc=targetIndex%size;
 
-let best=targetIndex;
+let r1=sr;
+let r2=sr;
+let c1=sc;
+let c2=sc;
 
-const steps=Math.max(Math.abs(tr-sr),Math.abs(tc-sc));
+const needUp=tr<sr;
+const needDown=tr>sr;
+const needLeft=tc<sc;
+const needRight=tc>sc;
 
-if(steps===0)return targetIndex;
+let canExpand=true;
 
-for(let step=1;step<=steps;step++){
-const rr=Math.round(sr+(tr-sr)*step/steps);
-const cc=Math.round(sc+(tc-sc)*step/steps);
-const candidate=rr*size+cc;
-const rect=makeRect(sr,sc,rr,cc);
+while(canExpand){
+canExpand=false;
 
-const hit=userRects.some((u,i)=>i!==ignoreIndex&&overlap(u,rect));
-
-if(hit){
-return best;
+if(needUp&&r1>tr){
+const next=makeRect(r1-1,c1,r2,c2);
+if(!rectHasObstacle(next,ignoreIndex)){
+r1--;
+canExpand=true;
+}
 }
 
-best=candidate;
+if(needDown&&r2<tr){
+const next=makeRect(r1,c1,r2+1,c2);
+if(!rectHasObstacle(next,ignoreIndex)){
+r2++;
+canExpand=true;
+}
 }
 
-return best;
+if(needLeft&&c1>tc){
+const next=makeRect(r1,c1-1,r2,c2);
+if(!rectHasObstacle(next,ignoreIndex)){
+c1--;
+canExpand=true;
+}
+}
+
+if(needRight&&c2<tc){
+const next=makeRect(r1,c1,r2,c2+1);
+if(!rectHasObstacle(next,ignoreIndex)){
+c2++;
+canExpand=true;
+}
+}
+}
+
+const finalR=tr<sr?r1:r2;
+const finalC=tc<sc?c1:c2;
+
+return finalR*size+finalC;
 }
 
 function getDrawRect(){
@@ -1264,7 +1404,7 @@ const inside=cluesInside(rect);
 if(inside.length!==1){
 return{
 ok:false,
-msg:"พื้นที่ต้องมีตัวเลขแค่ 1 ตัว"
+msg:"พื้นที่ต้องมีคำใบ้พอดี 1 จุด"
 };
 }
 
@@ -1286,6 +1426,13 @@ msg:`รูปทรงต้องเป็น ${shapeIcon(clue.shape)}`
 
 const overlaps=overlappingIndexes(rect,dragStartedOnRect);
 
+if(overlaps.length){
+return{
+ok:false,
+msg:"พื้นที่ชนกับช่องที่วางไว้แล้ว"
+};
+}
+
 if(preview){
 return{
 ok:true,
@@ -1295,7 +1442,7 @@ msg:"preview"
 
 return{
 ok:true,
-msg:"วางได้",
+msg:clue.value===null?"วางพื้นที่ ? ตามทรงแล้ว":"วางได้",
 overlaps
 };
 }
@@ -1321,7 +1468,7 @@ return;
 
 history.push(JSON.stringify(userRects));
 
-const removeSet=new Set(legal.overlaps||[]);
+const removeSet=new Set();
 
 if(dragStartedOnRect!==null&&dragStartedOnRect>-1){
 removeSet.add(dragStartedOnRect);
@@ -1475,7 +1622,7 @@ const inside=cluesInside(rect);
 if(inside.length!==1){
 return{
 ok:false,
-msg:"มีพื้นที่ที่ไม่ได้ครอบตัวเลขพอดี"
+msg:"ทุกพื้นที่ต้องครอบคำใบ้พอดี 1 จุด"
 };
 }
 
@@ -1484,7 +1631,7 @@ const key=inside[0].r+","+inside[0].c;
 if(clueUsed.has(key)){
 return{
 ok:false,
-msg:"มีตัวเลขถูกใช้ซ้ำ"
+msg:"มีคำใบ้ถูกใช้ซ้ำ"
 };
 }
 
@@ -1494,7 +1641,7 @@ clueUsed.add(key);
 if(clueUsed.size!==clues.length){
 return{
 ok:false,
-msg:"ยังมีตัวเลขที่ยังไม่ถูกใช้"
+msg:"ยังมีคำใบ้ที่ยังไม่ถูกใช้"
 };
 }
 
@@ -1510,7 +1657,7 @@ const inside=cluesInside(rect);
 if(inside.length!==1){
 return{
 ok:false,
-msg:"ทุกพื้นที่ต้องมีตัวเลขแค่ 1 ตัว"
+msg:"ทุกพื้นที่ต้องมีคำใบ้พอดี 1 จุด"
 };
 }
 
