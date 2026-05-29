@@ -19,26 +19,18 @@ user-select:none;
 --app:#faf9f6;
 --card:#ffffff;
 --border:#e5dfd5;
---text:#111111;
---muted:#9c9c9c;
+--text:#111;
+--muted:#777;
 --soft:#ece7de;
 --softText:#666;
 --blue:#0a84ff;
---grid:#3d3d3d;
+--grid:#3f3f3f;
 --line:#cfc8bd;
 --cell:#fffdfa;
 --green:#1fa85c;
 --danger:#ff4d4f;
 --shadow:rgba(0,0,0,.08);
 --shadowStrong:rgba(0,0,0,.16);
---r1:#dcebff;
---r2:#ffe2ec;
---r3:#e3f8db;
---r4:#fff0bd;
---r5:#eadfff;
---r6:#d9fbf9;
---r7:#f0e4d3;
---r8:#e2e7ff;
 }
 
 html[data-theme="dark"]{
@@ -47,25 +39,17 @@ html[data-theme="dark"]{
 --card:#1d1f21;
 --border:#34363a;
 --text:#f5f5f5;
---muted:#8f8f94;
+--muted:#aaa;
 --soft:#2b2d30;
 --softText:#d0d0d0;
 --blue:#5ab0ff;
 --grid:#5d5f63;
---line:#34363a;
+--line:#3a3c40;
 --cell:#202224;
 --green:#79ffae;
 --danger:#ff6b6b;
 --shadow:rgba(0,0,0,.22);
 --shadowStrong:rgba(0,0,0,.35);
---r1:#1d4c79;
---r2:#5a2838;
---r3:#284f36;
---r4:#5f4d20;
---r5:#3e305d;
---r6:#245654;
---r7:#4b3928;
---r8:#30395d;
 }
 
 html,
@@ -83,8 +67,8 @@ color:var(--text);
 
 .app{
 max-width:430px;
-margin:auto;
 height:100svh;
+margin:auto;
 overflow:hidden;
 padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
 background:var(--app);
@@ -101,18 +85,17 @@ margin:8px 0 16px;
 
 .title{
 font-size:24px;
-font-weight:900;
+font-weight:950;
 letter-spacing:-.55px;
 text-align:center;
-white-space:nowrap;
 line-height:1;
+white-space:nowrap;
 }
 
 .levelBtn,
 .settingsBtn{
 height:44px;
 width:44px;
-padding:0;
 border-radius:15px;
 border:1px solid var(--border);
 background:var(--card);
@@ -121,7 +104,7 @@ align-items:center;
 justify-content:center;
 font-size:15px;
 font-weight:900;
-color:var(--text);
+box-shadow:0 8px 18px var(--shadow);
 }
 
 .settingsBtn{
@@ -164,7 +147,7 @@ align-items:center;
 padding:0 14px;
 border-radius:12px;
 font-size:15px;
-font-weight:800;
+font-weight:850;
 white-space:nowrap;
 }
 
@@ -190,6 +173,7 @@ align-items:center;
 justify-content:center;
 font-size:18px;
 font-weight:850;
+box-shadow:0 8px 18px var(--shadow);
 }
 
 .howto{
@@ -198,7 +182,7 @@ border:1px solid var(--border);
 border-radius:20px;
 padding:12px 14px;
 font-size:13px;
-font-weight:750;
+font-weight:800;
 line-height:1.45;
 color:var(--softText);
 margin-bottom:14px;
@@ -213,6 +197,7 @@ background:var(--card);
 border:1px solid var(--border);
 border-radius:26px;
 padding:14px;
+box-shadow:0 8px 18px var(--shadow);
 transition:.25s;
 }
 
@@ -227,9 +212,6 @@ border-radius:18px;
 overflow:hidden;
 background:var(--cell);
 touch-action:none;
-user-select:none;
--webkit-user-select:none;
--webkit-touch-callout:none;
 transition:.25s;
 }
 
@@ -243,7 +225,7 @@ display:flex;
 align-items:center;
 justify-content:center;
 background:transparent;
-font-size:clamp(16px,5.8vw,30px);
+font-size:calc(34px - (var(--size) * 1.6px));
 font-weight:950;
 color:var(--text);
 position:relative;
@@ -252,166 +234,11 @@ min-width:0;
 min-height:0;
 border-right:1px solid var(--line);
 border-bottom:1px solid var(--line);
-text-shadow:0 1px 2px rgba(255,255,255,.72);
-}
-
-.cell.clue{
-color:var(--text);
-}
-
-.cell.covered{
-color:rgba(17,17,17,.88);
-}
-
-html[data-theme="dark"] .cell.covered{
-color:rgba(245,245,245,.92);
+text-shadow:0 1px 1px rgba(255,255,255,.65);
 }
 
 html[data-theme="dark"] .cell{
-text-shadow:0 1px 2px rgba(0,0,0,.65);
-}
-
-.clueText{
-position:relative;
-width:100%;
-height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-line-height:1;
-isolation:isolate;
-}
-
-.clueShape{
-position:absolute;
-z-index:1;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
-pointer-events:none;
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 30%, white);
-border:2px solid color-mix(in srgb, var(--patchColor,#66c7ec) 68%, black);
-box-shadow:
-inset 0 1px 0 rgba(255,255,255,.48),
-0 2px 5px rgba(0,0,0,.10);
-opacity:.72;
-}
-
-.clueShape.square{
-width:68%;
-height:68%;
-border-radius:8px;
-}
-
-.clueShape.wide{
-width:84%;
-height:48%;
-border-radius:7px;
-}
-
-.clueShape.tall{
-width:48%;
-height:84%;
-border-radius:7px;
-}
-
-.clueShape.any{
-width:68%;
-height:68%;
-border-radius:8px;
-border-style:dashed;
-border-width:2px;
-background:color-mix(in srgb, var(--patchColor,#8b79e6) 24%, white);
-}
-
-.clueNumber{
-position:relative;
-z-index:3;
-min-width:50%;
-max-width:78%;
-height:50%;
-padding:0 5px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:6px;
-font-size:.76em;
-font-weight:950;
-letter-spacing:-.04em;
-color:#fff;
-background:var(--patchColor,#2e91d8);
-box-shadow:
-0 1px 0 rgba(0,0,0,.14),
-0 3px 7px rgba(0,0,0,.16),
-inset 0 1px 0 rgba(255,255,255,.34);
-text-shadow:0 1px 1px rgba(0,0,0,.28);
-}
-
-.clueNumber.free{
-display:none;
-}
-
-.cell.covered .clueShape{
-opacity:.52;
-}
-
-.cell.covered .clueNumber{
-opacity:.96;
-}
-
-html[data-theme="dark"] .clueShape{
-background:color-mix(in srgb, var(--patchColor,#66c7ec) 28%, #1d1f21);
-border-color:color-mix(in srgb, var(--patchColor,#66c7ec) 74%, white);
-opacity:.78;
-}
-
-html[data-theme="dark"] .clueNumber{
-box-shadow:
-0 1px 0 rgba(0,0,0,.28),
-0 3px 7px rgba(0,0,0,.34),
-inset 0 1px 0 rgba(255,255,255,.22);
-}
-
-@media(max-width:390px){
-.clueNumber{
-font-size:.72em;
-min-width:52%;
-height:52%;
-padding:0 4px;
-}
-
-.clueShape.square,
-.clueShape.any{
-width:72%;
-height:72%;
-}
-
-.clueShape.wide{
-width:86%;
-height:50%;
-}
-
-.clueShape.tall{
-width:50%;
-height:86%;
-}
-}
-
-.clueShape.square,
-.clueShape.any{
-width:78%;
-height:78%;
-}
-
-.clueShape.wide{
-width:92%;
-height:54%;
-}
-
-.clueShape.tall{
-width:54%;
-height:92%;
-}
+text-shadow:0 1px 1px rgba(0,0,0,.6);
 }
 
 .rectLayer,
@@ -429,30 +256,133 @@ z-index:2;
 z-index:6;
 }
 
-.rectBox,
+.rectBox{
+position:absolute;
+border-radius:12px;
+border:3px solid var(--rectColor,#5ab0ff);
+background:color-mix(in srgb,var(--rectColor,#5ab0ff) 27%,white);
+opacity:.34;
+box-shadow:
+inset 0 0 0 1px rgba(255,255,255,.50),
+0 2px 8px rgba(0,0,0,.08);
+}
+
+.rectBox.selected{
+opacity:.48;
+box-shadow:
+inset 0 0 0 1px rgba(255,255,255,.58),
+0 3px 12px rgba(0,0,0,.12);
+}
+
 .drawBox{
 position:absolute;
-border-radius:10px;
-border:3px solid rgba(0,0,0,.48);
-box-shadow:inset 0 0 0 1px rgba(255,255,255,.55);
-}
-
-html[data-theme="dark"] .rectBox,
-html[data-theme="dark"] .drawBox{
-border-color:rgba(255,255,255,.5);
-box-shadow:inset 0 0 0 1px rgba(0,0,0,.3);
-}
-
-.drawBox{
 z-index:6;
-border:4px solid var(--blue);
-background:rgba(10,132,255,.30);
-box-shadow:0 0 0 2px rgba(255,255,255,.7), inset 0 0 0 1px rgba(255,255,255,.6);
+border-radius:12px;
+border:4px solid var(--drawColor,var(--blue));
+background:color-mix(in srgb,var(--drawColor,var(--blue)) 24%,white);
+box-shadow:
+0 0 0 2px rgba(255,255,255,.78),
+inset 0 0 0 1px rgba(255,255,255,.58),
+0 4px 14px rgba(0,0,0,.15);
+opacity:.82;
 }
 
 .drawBox.bad{
-border-color:var(--danger);
-background:rgba(255,77,79,.26);
+--drawColor:var(--danger);
+background:rgba(255,77,79,.22);
+}
+
+.clueText{
+position:relative;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+line-height:1;
+isolation:isolate;
+}
+
+.clueShape{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+z-index:1;
+pointer-events:none;
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 30%,white);
+border:2px solid color-mix(in srgb,var(--patchColor,#29b6f6) 68%,black);
+opacity:.76;
+box-shadow:
+inset 0 1px 0 rgba(255,255,255,.48),
+0 2px 5px rgba(0,0,0,.10);
+}
+
+.clueShape.square{
+width:70%;
+height:70%;
+border-radius:8px;
+}
+
+.clueShape.wide{
+width:86%;
+height:48%;
+border-radius:7px;
+}
+
+.clueShape.tall{
+width:48%;
+height:86%;
+border-radius:7px;
+}
+
+.clueShape.any{
+width:70%;
+height:70%;
+border-radius:8px;
+border-style:dashed;
+border-width:2px;
+background:color-mix(in srgb,var(--patchColor,#7e57e8) 24%,white);
+}
+
+.clueNumber{
+position:relative;
+z-index:3;
+min-width:50%;
+max-width:78%;
+height:50%;
+padding:0 5px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:6px;
+font-size:.76em;
+font-weight:950;
+letter-spacing:-.04em;
+color:#fff;
+background:var(--patchColor,#29b6f6);
+box-shadow:
+0 1px 0 rgba(0,0,0,.14),
+0 3px 7px rgba(0,0,0,.16),
+inset 0 1px 0 rgba(255,255,255,.34);
+text-shadow:0 1px 1px rgba(0,0,0,.28);
+}
+
+.clueNumber.free{
+display:none;
+}
+
+html[data-theme="dark"] .clueShape{
+background:color-mix(in srgb,var(--patchColor,#29b6f6) 30%,#202224);
+border-color:color-mix(in srgb,var(--patchColor,#29b6f6) 74%,white);
+opacity:.82;
+}
+
+html[data-theme="dark"] .clueNumber{
+box-shadow:
+0 1px 0 rgba(0,0,0,.28),
+0 3px 7px rgba(0,0,0,.34),
+inset 0 1px 0 rgba(255,255,255,.22);
 }
 
 .status{
@@ -493,47 +423,17 @@ justify-content:center;
 font-size:15px;
 font-weight:850;
 color:var(--softText);
+box-shadow:0 8px 18px var(--shadow);
 transition:.14s;
 }
 
-button,
-.pill,
-.tool,
-.levelBtn,
-.settingsBtn,
-.menuItem{
-position:relative;
-overflow:hidden;
-transform:translateZ(0);
-box-shadow:0 8px 18px var(--shadow);
-transition:transform .12s ease,filter .12s ease,box-shadow .12s ease,background .12s ease;
-}
-
-button:active,
-.pill:active,
 .tool:active,
+.pill:active,
 .levelBtn:active,
 .settingsBtn:active,
 .menuItem:active{
 transform:scale(.94);
-filter:brightness(.94);
-box-shadow:0 3px 8px var(--shadowStrong) inset;
-}
-
-.ripple{
-position:absolute;
-border-radius:50%;
-background:rgba(10,132,255,.22);
-transform:scale(0);
-animation:ripple .45s ease-out;
-pointer-events:none;
-}
-
-@keyframes ripple{
-to{
-transform:scale(3.2);
-opacity:0;
-}
+filter:brightness(.95);
 }
 
 .winOverlay{
@@ -558,14 +458,8 @@ animation:pop .28s ease;
 }
 
 @keyframes pop{
-from{
-opacity:0;
-transform:translateY(10px) scale(.96);
-}
-to{
-opacity:1;
-transform:translateY(0) scale(1);
-}
+from{opacity:0;transform:translateY(10px) scale(.96);}
+to{opacity:1;transform:translateY(0) scale(1);}
 }
 
 .winTitle{
@@ -591,51 +485,6 @@ animation:glow 1s infinite;
 100%{box-shadow:0 0 0 0 rgba(31,168,92,.1);}
 }
 
-.donationOverlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-display:none;
-align-items:center;
-justify-content:center;
-padding:24px;
-z-index:200;
-}
-
-.donationCard{
-width:100%;
-max-width:360px;
-background:var(--card);
-border-radius:26px;
-padding:22px;
-border:1px solid var(--border);
-text-align:center;
-}
-
-.donationCard h3{
-margin:0 0 10px;
-font-size:24px;
-}
-
-.donationCard p{
-margin:0;
-font-size:14px;
-line-height:1.5;
-font-weight:750;
-color:var(--softText);
-}
-
-.closeBtn{
-margin-top:14px;
-height:44px;
-border-radius:14px;
-font-size:16px;
-color:var(--text);
-border:1px solid var(--border);
-background:var(--soft);
-width:100%;
-}
-
 @media(max-width:390px){
 .headerRow{
 grid-template-columns:42px minmax(0,1fr) 42px;
@@ -652,8 +501,31 @@ width:42px;
 height:42px;
 }
 
-.settingsMenu{
-width:224px;
+.cell{
+font-size:calc(32px - (var(--size) * 1.5px));
+}
+
+.clueNumber{
+font-size:.74em;
+min-width:52%;
+height:52%;
+padding:0 4px;
+}
+
+.clueShape.square,
+.clueShape.any{
+width:74%;
+height:74%;
+}
+
+.clueShape.wide{
+width:88%;
+height:50%;
+}
+
+.clueShape.tall{
+width:50%;
+height:88%;
 }
 }
 
@@ -711,7 +583,6 @@ height:46px;
 <div class="settingsMenu" id="menu">
 <div class="menuItem" id="relaxMenuItem" onclick="toggleRelaxationMode()">🧘 Relaxation: Off</div>
 <div class="menuItem" onclick="toggleTheme()">🌓 Toggle Theme</div>
-<div class="menuItem" onclick="openDonation()">💙 Donation</div>
 </div>
 
 <div class="topbar">
@@ -720,7 +591,7 @@ height:46px;
 </div>
 
 <div class="howto">
-ลากให้ครบทั้งกระดาน / ตัวเลข = จำนวนช่อง / ? = เดาขนาดจากพื้นที่รอบ ๆ / รูปทรงคือข้อบังคับ
+ลากให้ครบทั้งกระดาน / ตัวเลข = จำนวนช่อง / ไม่มีเลข = เดาขนาดจากพื้นที่รอบ ๆ / รูปทรงคือข้อบังคับ
 </div>
 
 <div class="boardWrap">
@@ -747,14 +618,6 @@ height:46px;
 
 </div>
 
-<div class="donationOverlay" id="donationOverlay" onclick="closeDonation(event)">
-<div class="donationCard">
-<h3>Donation</h3>
-<p>ใส่ QR หรือรูป donation ของคุณเองได้ภายหลัง โดยเพิ่มรูปใน repo แล้วแก้ส่วนนี้เป็น img</p>
-<button class="closeBtn" onclick="hideDonation()">Close</button>
-</div>
-</div>
-
 <script>
 let size=6;
 let clues=[];
@@ -775,7 +638,6 @@ let drawing=false;
 let startCell=null;
 let endCell=null;
 let selectedRect=null;
-let dragStartedOnRect=null;
 let pointerWasOutside=false;
 
 const boardEl=document.getElementById("board");
@@ -785,17 +647,6 @@ const winOverlay=document.getElementById("winOverlay");
 const winText=document.getElementById("winText");
 const hintBtn=document.getElementById("hintBtn");
 const statusEl=document.getElementById("status");
-
-const colors=[
-"var(--r1)",
-"var(--r2)",
-"var(--r3)",
-"var(--r4)",
-"var(--r5)",
-"var(--r6)",
-"var(--r7)",
-"var(--r8)"
-];
 
 function vibrate(p=15){
 if(navigator.vibrate)navigator.vibrate(p);
@@ -816,32 +667,32 @@ return Math.floor(Math.random()*(max-min+1))+min;
 
 function getLevelSize(){
 if(currentLevel==="easy")return 5;
-if(currentLevel==="hard")return Math.random()<.45?7:8;
-return Math.random()<.35?6:7;
+if(currentLevel==="hard")return 7;
+return 6;
 }
 
 function getTargetRects(){
 if(currentLevel==="easy")return rand(6,8);
-if(currentLevel==="hard")return size===8?rand(9,12):rand(8,11);
-return size===7?rand(8,11):rand(7,10);
+if(currentLevel==="hard")return rand(9,12);
+return rand(8,10);
 }
 
 function getMaxArea(){
 if(currentLevel==="easy")return 12;
-if(currentLevel==="hard")return size===8?26:22;
-return size===7?18:16;
+if(currentLevel==="hard")return 18;
+return 15;
 }
 
 function getMinLargeNumber(){
 if(currentLevel==="easy")return 5;
-if(currentLevel==="hard")return size===8?12:10;
-return size===7?8:7;
+if(currentLevel==="hard")return 10;
+return 7;
 }
 
 function getFreeClueCount(total){
 if(currentLevel==="easy")return 0;
-if(currentLevel==="hard")return Math.min(total-5,rand(2,4));
-return Math.min(total-5,rand(1,2));
+if(currentLevel==="hard")return Math.min(total-5,rand(1,2));
+return Math.min(total-5,rand(0,1));
 }
 
 function makeRect(r1,c1,r2,c2){
@@ -894,20 +745,6 @@ rects
 
 if(!candidates.length)return false;
 
-const keepLargeChance=currentLevel==="easy"?.28:currentLevel==="hard"?.62:.45;
-
-if(Math.random()<keepLargeChance){
-candidates=candidates.filter(x=>area(x.rect)>getMinLargeNumber());
-if(!candidates.length){
-candidates=shuffle(
-rects
-.map((rect,i)=>({rect,i}))
-.filter(x=>area(x.rect)>1)
-)
-.sort((a,b)=>area(b.rect)-area(a.rect));
-}
-}
-
 for(const item of candidates.slice(0,Math.max(1,Math.ceil(candidates.length*.75)))){
 const rect=item.rect;
 const options=[];
@@ -958,7 +795,6 @@ guard=0;
 
 while(rects.some(r=>area(r)>getMaxArea())&&guard<300){
 const idx=rects.findIndex(r=>area(r)>getMaxArea());
-
 if(idx<0)break;
 
 const big=rects[idx];
@@ -1002,18 +838,19 @@ if(rect.h>rect.w)return "tall";
 return "any";
 }
 
-function shapeIcon(shape){
-if(shape==="square")return "□";
-if(shape==="wide")return "▭";
-if(shape==="tall")return "▯";
-return "";
-}
-
 function shapeClass(shape){
 if(shape==="square")return "square";
 if(shape==="wide")return "wide";
 if(shape==="tall")return "tall";
 return "any";
+}
+
+function shapeOk(rect,shape){
+if(shape==="any")return true;
+if(shape==="square")return rect.w===rect.h;
+if(shape==="wide")return rect.w>rect.h;
+if(shape==="tall")return rect.h>rect.w;
+return true;
 }
 
 function patchColorByValue(value,shape){
@@ -1039,14 +876,6 @@ if(shape==="any")seed+=11;
 return palette[Math.abs(seed)%palette.length];
 }
 
-function shapeOk(rect,shape){
-if(shape==="any")return true;
-if(shape==="square")return rect.w===rect.h;
-if(shape==="wide")return rect.w>rect.h;
-if(shape==="tall")return rect.h>rect.w;
-return true;
-}
-
 function generatePuzzle(){
 size=getLevelSize();
 const target=getTargetRects();
@@ -1054,7 +883,7 @@ const target=getTargetRects();
 let best=null;
 let bestScore=Infinity;
 
-for(let attempt=0;attempt<180;attempt++){
+for(let attempt=0;attempt<160;attempt++){
 let rects=[{r:0,c:0,h:size,w:size}];
 
 rects=refineRects(rects,target);
@@ -1063,58 +892,37 @@ const areas=rects.map(area);
 const maxArea=Math.max(...areas);
 const highCount=rects.filter(r=>area(r)>=getMinLargeNumber()).length;
 const lowCount=rects.filter(r=>area(r)<=3).length;
-const midCount=rects.filter(r=>area(r)>=4&&area(r)<getMinLargeNumber()).length;
-const oneCount=rects.filter(r=>area(r)===1).length;
 const diff=Math.abs(rects.length-target);
-
-const needHigh=currentLevel==="hard"?3:currentLevel==="normal"?2:1;
-const needLow=currentLevel==="hard"?3:currentLevel==="normal"?2:1;
 const uniqueAreaCount=new Set(areas).size;
 
-const highPenalty=Math.max(0,needHigh-highCount)*28;
-const lowPenalty=Math.max(0,needLow-lowCount)*12;
-const maxPenalty=Math.max(0,maxArea-getMaxArea())*8;
-const onePenalty=currentLevel==="hard"?oneCount*2:oneCount*3;
+const needHigh=currentLevel==="hard"?2:1;
+const needLow=currentLevel==="hard"?2:1;
 
 const score=
 diff*10+
-maxPenalty+
-onePenalty+
-highPenalty+
-lowPenalty+
-Math.abs(highCount-lowCount)*2-
-midCount-
-uniqueAreaCount*3;
+Math.max(0,maxArea-getMaxArea())*8+
+Math.max(0,needHigh-highCount)*20+
+Math.max(0,needLow-lowCount)*8-
+uniqueAreaCount*2;
 
 if(score<bestScore){
 bestScore=score;
 best=rects.map(r=>({...r}));
 }
 
-if(
-diff<=1 &&
-maxArea<=getMaxArea() &&
-highCount>=needHigh &&
-lowCount>=needLow
-){
+if(diff<=1&&maxArea<=getMaxArea()&&highCount>=needHigh&&lowCount>=needLow){
 break;
 }
 }
 
-let rects=(best||[{r:0,c:0,h:size,w:size}])
+const rects=(best||[{r:0,c:0,h:size,w:size}])
 .map(r=>({...r}))
 .sort((a,b)=>a.r-b.r||a.c-b.c);
 
 const indexed=rects.map((r,i)=>({r,i,a:area(r)}));
-const freeCount=Math.max(0,getFreeClueCount(rects.length));
 const freeSet=new Set();
+const freeCount=getFreeClueCount(rects.length);
 
-/*
-Free block rule:
-- It is NOT invisible.
-- It always displays "?" plus a required shape icon.
-- The player must infer the area from remaining space, but shape is still constrained.
-*/
 const freeCandidates=shuffle(
 indexed
 .filter(x=>x.a>=4)
@@ -1130,16 +938,17 @@ const clueList=[];
 
 rects.forEach((rect,i)=>{
 const cells=rectCells(rect);
-const clueStyle=Math.random();
 let candidateCells=cells;
 
-if(clueStyle<.34){
+const style=Math.random();
+
+if(style<.38){
 candidateCells=cells.filter(cell=>{
 const rr=Math.floor(cell/size);
 const cc=cell%size;
 return rr===rect.r||rr===rect.r+rect.h-1||cc===rect.c||cc===rect.c+rect.w-1;
 });
-}else if(clueStyle<.58){
+}else if(style<.58){
 candidateCells=cells.filter(cell=>{
 const rr=Math.floor(cell/size);
 const cc=cell%size;
@@ -1157,9 +966,9 @@ let useShape=false;
 if(freeSet.has(i)){
 useShape=true;
 }else if(currentLevel==="easy"){
-useShape=Math.random()<.85;
+useShape=Math.random()<.82;
 }else if(currentLevel==="hard"){
-useShape=Math.random()<.48;
+useShape=Math.random()<.50;
 }else{
 useShape=Math.random()<.64;
 }
@@ -1190,7 +999,6 @@ seconds=0;
 finished=false;
 hintUsed=0;
 selectedRect=null;
-dragStartedOnRect=null;
 pointerWasOutside=false;
 gameRelaxed=relaxationMode;
 
@@ -1201,12 +1009,9 @@ timerEl.textContent="Relax";
 }else{
 timer=setInterval(()=>{
 if(finished)return;
-
 seconds++;
-
 const m=Math.floor(seconds/60);
 const s=seconds%60;
-
 timerEl.textContent=`${m}:${String(s).padStart(2,"0")}`;
 },1000);
 
@@ -1228,18 +1033,30 @@ function clueAt(r,c){
 return clues.find(x=>x.r===r&&x.c===c);
 }
 
+function cluesInside(rect){
+return clues.filter(clue=>rectContains(rect,clue.r,clue.c));
+}
+
+function patchColorForRect(rect){
+const inside=cluesInside(rect);
+
+if(inside.length===1){
+return patchColorByValue(inside[0].value,inside[0].shape);
+}
+
+return "#5ab0ff";
+}
+
 function userRectAt(r,c){
 for(let i=userRects.length-1;i>=0;i--){
 if(rectContains(userRects[i],r,c))return i;
 }
-
 return -1;
 }
 
 function coveredCell(index){
 const r=Math.floor(index/size);
 const c=index%size;
-
 return userRects.some(rect=>rectContains(rect,r,c));
 }
 
@@ -1248,21 +1065,22 @@ boardEl.style.setProperty("--size",size);
 boardEl.innerHTML="";
 
 const rectLayer=document.createElement("div");
-
 rectLayer.className="rectLayer";
 
 userRects.forEach((rect,i)=>{
 const box=document.createElement("div");
+const rectColor=patchColorForRect(rect);
 
 box.className="rectBox";
 box.style.left=`${rect.c/size*100}%`;
 box.style.top=`${rect.r/size*100}%`;
 box.style.width=`${rect.w/size*100}%`;
 box.style.height=`${rect.h/size*100}%`;
-const rectColor=patchColorForRect(rect);
-box.style.background=`color-mix(in srgb, ${rectColor} 30%, white)`;
-box.style.borderColor=selectedRect===i?rectColor:`color-mix(in srgb, ${rectColor} 62%, transparent)`;
-box.style.opacity=selectedRect===i?".46":".26";
+box.style.setProperty("--rectColor",rectColor);
+
+if(selectedRect===i){
+box.classList.add("selected");
+}
 
 rectLayer.appendChild(box);
 });
@@ -1272,37 +1090,25 @@ boardEl.appendChild(rectLayer);
 for(let i=0;i<size*size;i++){
 const r=Math.floor(i/size);
 const c=i%size;
-
 const cell=document.createElement("div");
-
 cell.className="cell";
-cell.dataset.index=i;
 
 const clue=clueAt(r,c);
 
 if(clue){
-cell.classList.add("clue");
-
 const wrap=document.createElement("div");
-
 wrap.className="clueText";
 
-const shapeType=shapeClass(clue.shape);
 const patchColor=patchColorByValue(clue.value,clue.shape);
-
 const shape=document.createElement("div");
-
-shape.className=`clueShape ${shapeType}`;
+shape.className=`clueShape ${shapeClass(clue.shape)}`;
 shape.style.setProperty("--patchColor",patchColor);
-
 wrap.appendChild(shape);
 
 const main=document.createElement("div");
-
 main.className=clue.value===null?"clueNumber free":"clueNumber";
 main.textContent=clue.value===null?"":clue.value;
 main.style.setProperty("--patchColor",patchColor);
-
 wrap.appendChild(main);
 
 cell.appendChild(wrap);
@@ -1316,9 +1122,7 @@ boardEl.appendChild(cell);
 }
 
 const drawLayer=document.createElement("div");
-
 drawLayer.className="drawLayer";
-
 boardEl.appendChild(drawLayer);
 
 bindBoardEvents();
@@ -1338,27 +1142,19 @@ boardEl.setPointerCapture(e.pointerId);
 
 const r=Math.floor(index/size);
 const c=index%size;
+const existing=userRectAt(r,c);
 
-dragStartedOnRect=userRectAt(r,c);
-pointerWasOutside=false;
-
-if(dragStartedOnRect>-1){
+if(existing>-1){
 history.push(JSON.stringify(userRects));
-
-userRects.splice(dragStartedOnRect,1);
-
+userRects.splice(existing,1);
 selectedRect=null;
-dragStartedOnRect=null;
 drawing=false;
 startCell=null;
 endCell=null;
 pointerWasOutside=false;
-
 render();
-
 status("ลบพื้นที่แล้ว ลากใหม่ได้เลย");
 vibrate(15);
-
 return;
 }
 
@@ -1366,6 +1162,7 @@ drawing=true;
 startCell=index;
 endCell=index;
 selectedRect=null;
+pointerWasOutside=false;
 
 drawPreview();
 vibrate(8);
@@ -1387,7 +1184,7 @@ return;
 }
 
 pointerWasOutside=false;
-endCell=smartClampToObstacle(startCell,index,dragStartedOnRect);
+endCell=smartClampToObstacle(startCell,index);
 
 drawPreview();
 };
@@ -1398,15 +1195,12 @@ if(!drawing||finished)return;
 e.preventDefault();
 
 if(pointerWasOutside||endCell===null){
-status("ยกเลิกการลาก");
-
 drawing=false;
 startCell=null;
-dragStartedOnRect=null;
+endCell=null;
 pointerWasOutside=false;
-
 clearDraw();
-
+status("ยกเลิกการลาก");
 return;
 }
 
@@ -1415,7 +1209,6 @@ commitDraw();
 drawing=false;
 startCell=null;
 endCell=null;
-dragStartedOnRect=null;
 pointerWasOutside=false;
 
 clearDraw();
@@ -1425,9 +1218,7 @@ boardEl.onpointercancel=()=>{
 drawing=false;
 startCell=null;
 endCell=null;
-dragStartedOnRect=null;
 pointerWasOutside=false;
-
 clearDraw();
 };
 }
@@ -1449,25 +1240,21 @@ const r=Math.min(size-1,Math.max(0,Math.floor((y-rect.top)/rect.height*size)));
 return r*size+c;
 }
 
-function isBlockedCell(r,c,ignoreIndex=null){
+function isBlockedCell(r,c){
 if(r<0||c<0||r>=size||c>=size)return true;
 
-return userRects.some((rect,i)=>{
-if(i===ignoreIndex)return false;
-return rectContains(rect,r,c);
-});
+return userRects.some(rect=>rectContains(rect,r,c));
 }
 
-function rectHasObstacle(rect,ignoreIndex=null){
+function rectHasObstacle(rect){
 for(let r=rect.r;r<rect.r+rect.h;r++){
 for(let c=rect.c;c<rect.c+rect.w;c++){
-if(isBlockedCell(r,c,ignoreIndex))return true;
+if(isBlockedCell(r,c))return true;
 }
 }
 return false;
 }
-
-function smartClampToObstacle(startIndex,targetIndex,ignoreIndex=null){
+function smartClampToObstacle(startIndex,targetIndex){
 if(startIndex===null||targetIndex===null)return targetIndex;
 
 const sr=Math.floor(startIndex/size);
@@ -1492,7 +1279,7 @@ canExpand=false;
 
 if(needUp&&r1>tr){
 const next=makeRect(r1-1,c1,r2,c2);
-if(!rectHasObstacle(next,ignoreIndex)){
+if(!rectHasObstacle(next)){
 r1--;
 canExpand=true;
 }
@@ -1500,7 +1287,7 @@ canExpand=true;
 
 if(needDown&&r2<tr){
 const next=makeRect(r1,c1,r2+1,c2);
-if(!rectHasObstacle(next,ignoreIndex)){
+if(!rectHasObstacle(next)){
 r2++;
 canExpand=true;
 }
@@ -1508,7 +1295,7 @@ canExpand=true;
 
 if(needLeft&&c1>tc){
 const next=makeRect(r1,c1-1,r2,c2);
-if(!rectHasObstacle(next,ignoreIndex)){
+if(!rectHasObstacle(next)){
 c1--;
 canExpand=true;
 }
@@ -1516,7 +1303,7 @@ canExpand=true;
 
 if(needRight&&c2<tc){
 const next=makeRect(r1,c1,r2,c2+1);
-if(!rectHasObstacle(next,ignoreIndex)){
+if(!rectHasObstacle(next)){
 c2++;
 canExpand=true;
 }
@@ -1552,10 +1339,16 @@ if(!layer)return;
 layer.innerHTML="";
 
 const box=document.createElement("div");
+const legal=isLegalShape(rect,true);
+const inside=cluesInside(rect);
 
 box.className="drawBox";
 
-if(!isLegalShape(rect,true).ok){
+if(inside.length===1){
+box.style.setProperty("--drawColor",patchColorByValue(inside[0].value,inside[0].shape));
+}
+
+if(!legal.ok){
 box.classList.add("bad");
 }
 
@@ -1571,26 +1364,6 @@ function clearDraw(){
 const layer=document.querySelector(".drawLayer");
 
 if(layer)layer.innerHTML="";
-}
-
-function cluesInside(rect){
-return clues.filter(clue=>rectContains(rect,clue.r,clue.c));
-}
-
-function patchColorForRect(rect){
-const inside=cluesInside(rect);
-
-if(inside.length===1){
-return patchColorByValue(inside[0].value,inside[0].shape);
-}
-
-return "#5ab0ff";
-}
-
-function overlappingIndexes(rect,ignoreIndex=null){
-return userRects
-.map((u,i)=>i!==ignoreIndex&&overlap(u,rect)?i:null)
-.filter(v=>v!==null);
 }
 
 function isLegalShape(rect,preview=false){
@@ -1615,30 +1388,20 @@ msg:`พื้นที่นี้มี ${area(rect)} ช่อง แต่�
 if(!shapeOk(rect,clue.shape)){
 return{
 ok:false,
-msg:`รูปทรงต้องเป็น ${shapeIcon(clue.shape)}`
+msg:"รูปทรงไม่ตรงกับคำใบ้"
 };
 }
 
-const overlaps=overlappingIndexes(rect,dragStartedOnRect);
-
-if(overlaps.length){
+if(rectHasObstacle(rect)){
 return{
 ok:false,
 msg:"พื้นที่ชนกับช่องที่วางไว้แล้ว"
 };
 }
 
-if(preview){
 return{
 ok:true,
-msg:"preview"
-};
-}
-
-return{
-ok:true,
-msg:clue.value===null?"วางพื้นที่ ? ตามทรงแล้ว":"วางได้",
-overlaps
+msg:"วางได้"
 };
 }
 
@@ -1650,26 +1413,13 @@ if(!rect)return;
 const legal=isLegalShape(rect,false);
 
 if(!legal.ok){
-if(dragStartedOnRect!==null&&dragStartedOnRect>-1){
-selectedRect=dragStartedOnRect;
-render();
-}
-
 status(legal.msg,"bad");
 vibrate([35,35,35]);
-
 return;
 }
 
 history.push(JSON.stringify(userRects));
 
-const removeSet=new Set();
-
-if(dragStartedOnRect!==null&&dragStartedOnRect>-1){
-removeSet.add(dragStartedOnRect);
-}
-
-userRects=userRects.filter((_,i)=>!removeSet.has(i));
 userRects.push(rect);
 selectedRect=userRects.length-1;
 
@@ -1776,6 +1526,37 @@ hintBtn.style.opacity="1";
 hintBtn.textContent="💡 Hint";
 }
 
+function validateRectFinal(rect){
+const inside=cluesInside(rect);
+
+if(inside.length!==1){
+return{
+ok:false,
+msg:"ทุกพื้นที่ต้องมีคำใบ้พอดี 1 จุด"
+};
+}
+
+const clue=inside[0];
+
+if(clue.value!==null&&area(rect)!==clue.value){
+return{
+ok:false,
+msg:"มีพื้นที่ที่จำนวนช่องไม่ตรงกับเลข"
+};
+}
+
+if(!shapeOk(rect,clue.shape)){
+return{
+ok:false,
+msg:"มีพื้นที่ที่รูปทรงไม่ตรงกับคำใบ้"
+};
+}
+
+return{
+ok:true
+};
+}
+
 function validateFinal(){
 const covered=new Map();
 
@@ -1846,44 +1627,12 @@ msg:"ชนะแล้ว!"
 };
 }
 
-function validateRectFinal(rect){
-const inside=cluesInside(rect);
-
-if(inside.length!==1){
-return{
-ok:false,
-msg:"ทุกพื้นที่ต้องมีคำใบ้พอดี 1 จุด"
-};
-}
-
-const clue=inside[0];
-
-if(clue.value!==null&&area(rect)!==clue.value){
-return{
-ok:false,
-msg:"มีพื้นที่ที่จำนวนช่องไม่ตรงกับเลข"
-};
-}
-
-if(!shapeOk(rect,clue.shape)){
-return{
-ok:false,
-msg:"มีพื้นที่ที่รูปทรงไม่ตรงกับคำใบ้"
-};
-}
-
-return{
-ok:true
-};
-}
-
 function checkWin(){
 const result=validateFinal();
 
 if(!result.ok)return;
 
 finished=true;
-
 clearInterval(timer);
 
 boardEl.classList.add("finished");
@@ -1929,12 +1678,9 @@ document.querySelectorAll("#levelMenu .menuItem")[activeIndex].classList.add("ac
 
 function setLevel(level){
 currentLevel=level;
-
 localStorage.setItem("shikakuLevel",currentLevel);
-
 updateLevelUI();
 document.getElementById("levelMenu").classList.remove("show");
-
 newGame();
 }
 
@@ -1961,7 +1707,6 @@ const current=document.documentElement.getAttribute("data-theme");
 const nextTheme=current==="dark"?"light":"dark";
 
 document.documentElement.setAttribute("data-theme",nextTheme);
-
 localStorage.setItem("shikakuTheme",nextTheme);
 document.getElementById("menu").classList.remove("show");
 }
@@ -1982,13 +1727,9 @@ item.classList.remove("active");
 
 function toggleRelaxationMode(){
 relaxationMode=!relaxationMode;
-
 localStorage.setItem("shikakuRelax",relaxationMode?"1":"0");
-
 updateRelaxationUI();
-
 document.getElementById("menu").classList.remove("show");
-
 newGame();
 }
 
@@ -1997,43 +1738,6 @@ if(!localStorage.getItem("shikakuTheme")){
 applyTheme();
 }
 });
-
-function openDonation(){
-document.getElementById("menu").classList.remove("show");
-document.getElementById("donationOverlay").style.display="flex";
-}
-
-function hideDonation(){
-document.getElementById("donationOverlay").style.display="none";
-}
-
-function closeDonation(e){
-if(e.target.id==="donationOverlay"){
-hideDonation();
-}
-}
-
-function addRippleEffect(){
-const targets=document.querySelectorAll("button,.pill,.tool,.levelBtn,.settingsBtn,.menuItem");
-
-targets.forEach(el=>{
-el.addEventListener("click",function(e){
-const rect=this.getBoundingClientRect();
-const size=Math.max(rect.width,rect.height);
-const ripple=document.createElement("span");
-
-ripple.className="ripple";
-ripple.style.width=`${size}px`;
-ripple.style.height=`${size}px`;
-ripple.style.left=`${e.clientX-rect.left-size/2}px`;
-ripple.style.top=`${e.clientY-rect.top-size/2}px`;
-
-this.appendChild(ripple);
-
-setTimeout(()=>ripple.remove(),450);
-});
-});
-}
 
 document.addEventListener("click",(e)=>{
 const levelMenu=document.getElementById("levelMenu");
@@ -2073,7 +1777,6 @@ relaxationMode=localStorage.getItem("shikakuRelax")==="1";
 applyTheme();
 updateLevelUI();
 updateRelaxationUI();
-addRippleEffect();
 newGame();
 </script>
 
