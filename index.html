@@ -602,6 +602,128 @@ border-radius:7px;
 }
 }
 
+
+/* Refined Dark Theme — high contrast charcoal + jewel clues */
+html[data-theme="dark"]{
+--bg:#0b0f14;
+--app:#10151b;
+--card:#151b22;
+--border:#27313b;
+--text:#f2f5f7;
+--muted:#96a2ae;
+--soft:#1c242d;
+--softText:#c5ced6;
+--blue:#59adff;
+--grid:#aab4bf;
+--line:#303a45;
+--cell:#11171e;
+--green:#62de99;
+--danger:#ff7077;
+--shadow:rgba(0,0,0,.28);
+--shadowStrong:rgba(0,0,0,.48);
+}
+
+html[data-theme="dark"] body{
+background:var(--bg);
+}
+
+html[data-theme="dark"] .app{
+background:
+radial-gradient(circle at 50% -5%, rgba(79,108,138,.12), transparent 34%),
+var(--app);
+}
+
+html[data-theme="dark"] .levelBtn,
+html[data-theme="dark"] .settingsBtn,
+html[data-theme="dark"] .pill,
+html[data-theme="dark"] .howto,
+html[data-theme="dark"] .boardCard,
+html[data-theme="dark"] .levelMenu,
+html[data-theme="dark"] .settingsMenu,
+html[data-theme="dark"] .winBox{
+background:#151b22;
+border-color:#27313b;
+box-shadow:0 9px 22px rgba(0,0,0,.18);
+}
+
+html[data-theme="dark"] .board{
+background:var(--cell);
+border-color:#9aa7b3;
+}
+
+html[data-theme="dark"] .cell{
+border-color:#303a45;
+}
+
+html[data-theme="dark"] .cell.clueCell{
+background:var(--patchBgDark) !important;
+box-shadow:inset 0 0 0 1px var(--patchEdgeDark) !important;
+}
+
+html[data-theme="dark"] .cell.covered.clueCell{
+background:transparent !important;
+box-shadow:none !important;
+}
+
+html[data-theme="dark"] .clueShape{
+border-color:var(--outlineDark) !important;
+opacity:.74;
+}
+
+html[data-theme="dark"] .clueShape.any{
+background:
+linear-gradient(var(--outlineDark),var(--outlineDark)) left top / 17% 2px no-repeat,
+linear-gradient(var(--outlineDark),var(--outlineDark)) left top / 2px 17% no-repeat,
+linear-gradient(var(--outlineDark),var(--outlineDark)) right top / 17% 2px no-repeat,
+linear-gradient(var(--outlineDark),var(--outlineDark)) right top / 2px 17% no-repeat,
+linear-gradient(var(--outlineDark),var(--outlineDark)) left bottom / 17% 2px no-repeat,
+linear-gradient(var(--outlineDark),var(--outlineDark)) left bottom / 2px 17% no-repeat,
+linear-gradient(var(--outlineDark),var(--outlineDark)) right bottom / 17% 2px no-repeat,
+linear-gradient(var(--outlineDark),var(--outlineDark)) right bottom / 2px 17% no-repeat !important;
+}
+
+html[data-theme="dark"] .clueNumber{
+color:var(--numberDark) !important;
+text-shadow:0 1px 2px rgba(0,0,0,.42);
+}
+
+html[data-theme="dark"] .rectBox{
+background:var(--rectBg,rgba(90,176,255,.30));
+mix-blend-mode:screen;
+opacity:.78;
+border-width:3px;
+}
+
+html[data-theme="dark"] .drawBox{
+mix-blend-mode:screen;
+opacity:.88;
+}
+
+html[data-theme="dark"] .drawCount{
+background:#172029;
+color:var(--drawColor,var(--blue));
+border-color:var(--drawColor,var(--blue));
+box-shadow:0 2px 10px rgba(0,0,0,.30);
+}
+
+html[data-theme="dark"] .tool{
+background:#1b232c;
+color:#d4dce4;
+box-shadow:0 8px 20px rgba(0,0,0,.20);
+}
+
+html[data-theme="dark"] .status{
+color:#aeb9c4;
+}
+
+html[data-theme="dark"] .status.good{
+color:#62de99;
+}
+
+html[data-theme="dark"] .status.bad{
+color:#ff7077;
+}
+
 </style>
 </head>
 
@@ -1433,6 +1555,10 @@ const patchColor=patchColorByValue(clue.value,clue.shape);
 cell.classList.add("clueCell");
 cell.style.setProperty("--patchBg",tint(patchColor,.78));
 cell.style.setProperty("--patchEdge",rgba(patchColor,.28));
+cell.style.setProperty("--patchBgDark",rgba(patchColor,.22));
+cell.style.setProperty("--patchEdgeDark",rgba(patchColor,.56));
+cell.style.setProperty("--numberDark",tint(patchColor,.26));
+cell.style.setProperty("--outlineDark",tint(patchColor,.34));
 
 const shape=document.createElement("div");
 shape.className=`clueShape ${shapeClass(clue.shape)}`;
