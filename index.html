@@ -533,6 +533,75 @@ background:transparent !important;
 box-shadow:none !important;
 }
 
+
+/* Reference-inspired placed patch + live drag count */
+.rectBox{
+border-width:3px;
+background:var(--rectBg,rgba(90,176,255,.30));
+opacity:1;
+box-shadow:
+inset 0 0 0 1px rgba(255,255,255,.30),
+0 1px 4px rgba(0,0,0,.05);
+}
+
+.rectBox.selected{
+box-shadow:
+inset 0 0 0 1px rgba(255,255,255,.44),
+0 0 0 1px var(--rectColor,#5ab0ff);
+}
+
+.drawBox{
+border-width:3px;
+background:var(--drawBg,rgba(90,176,255,.27));
+opacity:1;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.drawCount{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+min-width:28px;
+height:28px;
+padding:0 7px;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:8px;
+font-size:14px;
+font-weight:900;
+letter-spacing:-.03em;
+line-height:1;
+color:var(--drawColor,var(--blue));
+background:rgba(255,255,255,.78);
+border:1.5px solid var(--drawColor,var(--blue));
+box-shadow:0 2px 8px rgba(0,0,0,.07);
+z-index:2;
+}
+
+.drawBox.bad .drawCount{
+color:var(--danger);
+border-color:var(--danger);
+background:rgba(255,255,255,.84);
+}
+
+html[data-theme="dark"] .drawCount{
+background:rgba(29,31,33,.80);
+}
+
+@media(max-width:390px){
+.drawCount{
+min-width:25px;
+height:25px;
+padding:0 6px;
+font-size:13px;
+border-radius:7px;
+}
+}
+
 </style>
 </head>
 
@@ -1336,7 +1405,7 @@ box.style.top=`${rect.r/size*100}%`;
 box.style.width=`${rect.w/size*100}%`;
 box.style.height=`${rect.h/size*100}%`;
 box.style.setProperty("--rectColor",rectColor);
-box.style.setProperty("--rectBg",rgba(rectColor,.14));
+box.style.setProperty("--rectBg",rgba(rectColor,.30));
 
 if(selectedRect===i){
 box.classList.add("selected");
@@ -1586,13 +1655,14 @@ layer.innerHTML="";
 const box=document.createElement("div");
 const legal=isLegalShape(rect,true);
 const inside=cluesInside(rect);
+const liveArea=area(rect);
 
 box.className="drawBox";
 
 if(inside.length===1){
 const color=patchColorByValue(inside[0].value,inside[0].shape);
 box.style.setProperty("--drawColor",color);
-box.style.setProperty("--drawBg",rgba(color,.14));
+box.style.setProperty("--drawBg",rgba(color,.27));
 }
 
 if(!legal.ok){
@@ -1603,6 +1673,11 @@ box.style.left=`${rect.c/size*100}%`;
 box.style.top=`${rect.r/size*100}%`;
 box.style.width=`${rect.w/size*100}%`;
 box.style.height=`${rect.h/size*100}%`;
+
+const count=document.createElement("div");
+count.className="drawCount";
+count.textContent=liveArea;
+box.appendChild(count);
 
 layer.appendChild(box);
 }
