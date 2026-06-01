@@ -1506,15 +1506,8 @@ if(!drawing||finished)return;
 
 e.preventDefault();
 
-const index=getCellFromPoint(e.clientX,e.clientY,false);
-
-if(index===null){
-pointerWasOutside=true;
-endCell=null;
-clearDraw();
-status("ปล่อยนอกกระดาน = ยกเลิกการลาก");
-return;
-}
+/* ลากเลยขอบได้ โดยพื้นที่จะหยุดที่ขอบกระดานที่ใกล้ที่สุด */
+const index=getCellFromPointClamped(e.clientX,e.clientY);
 
 pointerWasOutside=false;
 endCell=smartClampToObstacle(startCell,index);
@@ -1527,13 +1520,13 @@ if(!drawing||finished)return;
 
 e.preventDefault();
 
-if(pointerWasOutside||endCell===null){
+if(endCell===null){
 drawing=false;
 startCell=null;
 endCell=null;
 pointerWasOutside=false;
 clearDraw();
-status("ยกเลิกการลาก");
+status("ไม่ได้วางพื้นที่");
 return;
 }
 
@@ -1564,6 +1557,18 @@ if(!strict&&(x<rect.left-20||x>rect.right+20||y<rect.top-20||y>rect.bottom+20))r
 
 const c=Math.min(size-1,Math.max(0,Math.floor((x-rect.left)/rect.width*size)));
 const r=Math.min(size-1,Math.max(0,Math.floor((y-rect.top)/rect.height*size)));
+
+return r*size+c;
+}
+
+function getCellFromPointClamped(x,y){
+const rect=boardEl.getBoundingClientRect();
+
+const clampedX=Math.min(rect.right-0.001,Math.max(rect.left,x));
+const clampedY=Math.min(rect.bottom-0.001,Math.max(rect.top,y));
+
+const c=Math.min(size-1,Math.max(0,Math.floor((clampedX-rect.left)/rect.width*size)));
+const r=Math.min(size-1,Math.max(0,Math.floor((clampedY-rect.top)/rect.height*size)));
 
 return r*size+c;
 }
